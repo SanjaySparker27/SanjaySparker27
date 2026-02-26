@@ -6,7 +6,7 @@
 
 ### 🤖 Robotics Lead @ Otonomy.AI | Humanoid Data Infrastructure
 
-[![Portfolio](https://img.shields.io/badge/🌐_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sparker2707.github.io/sanjay-sparker-portfolio/)
+[![Portfolio](https://img.shields.io/badge/🌐_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/)
 [![LinkedIn](https://img.shields.io/badge/🔗_LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sanjay-sparker-5679b51b3/)
 [![Email](https://img.shields.io/badge/📧_Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sanjaysparker27@gmail.com)
 
@@ -129,8 +129,8 @@
 
 <div align="center">
 
-<img height="180em" src="https://github-readme-stats-sigma-five.vercel.app/api?username=SanjaySparker27&show_icons=true&theme=radical&hide_border=true&bg_color=0D1117&title_color=FF6B35&icon_color=FF6B35&text_color=FFFFFF&count_private=true" />
-<img height="180em" src="https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=SanjaySparker27&layout=compact&theme=radical&hide_border=true&bg_color=0D1117&title_color=FF6B35&text_color=FFFFFF" />
+<img height="180em" src="https://github-readme-stats.vercel.app/api?username=SanjaySparker27&show_icons=true&theme=radical&hide_border=true&bg_color=0D1117&title_color=FF6B35&icon_color=FF6B35&text_color=FFFFFF&count_private=true" />
+<img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=SanjaySparker27&layout=compact&theme=radical&hide_border=true&bg_color=0D1117&title_color=FF6B35&text_color=FFFFFF" />
 
 </div>
 
