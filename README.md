@@ -60,11 +60,7 @@
 <tr>
 <td width="50%">
 
-### 🧠 Mally AI
-- **LLM Planning** — Natural language to robot actions
-- **Vision-Language** — CLIP-based grounding
-- **Task Decomposition** — Complex to primitive actions
-- **Closed-Loop** — Real-time feedback & replanning
+### 🧠 
 
 </td>
 <td width="50%">
