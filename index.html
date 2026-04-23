@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sanjay Sparker — Robotics Lead | Otonomy.AI | Humanoid Data Infrastructure</title>
-    <meta name="description" content="Sanjay Sparker - Robotics Lead at Otonomy.AI specializing in Humanoid Data Infrastructure, Actuator Systems, Mally AI, and UAV Autopilot Development.">
+    <meta name="description" content="Sanjay Sparker - Robotics Lead at Otonomy.AI specializing in Humanoid Data Infrastructure, Actuator Systems, Agentic AI, VIO/SLAM, 360° Navigation, and UAV Autopilot Development.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,9 +35,9 @@
                     <i data-lucide="bot"></i>
                     <span>Humanoid Data</span>
                 </a>
-                <a href="#mally" class="nav-item">
+                <a href="#agentic-ai" class="nav-item">
                     <i data-lucide="brain"></i>
-                    <span>Mally AI</span>
+                    <span>Agentic AI</span>
                 </a>
                 <a href="#actuators" class="nav-item">
                     <i data-lucide="cpu"></i>
@@ -46,6 +46,10 @@
                 <a href="#uav" class="nav-item">
                     <i data-lucide="plane"></i>
                     <span>UAV Systems</span>
+                </a>
+                <a href="#drone-research" class="nav-item">
+                    <i data-lucide="satellite"></i>
+                    <span>Drone Research</span>
                 </a>
                 <a href="drone-sim.html" class="nav-item" target="_blank">
                     <i data-lucide="gamepad-2"></i>
@@ -96,8 +100,9 @@
         </div>
         <nav class="nav-links">
             <a href="#humanoid" class="nav-link">Humanoid</a>
-            <a href="#mally" class="nav-link">Mally AI</a>
+            <a href="#agentic-ai" class="nav-link">Agentic AI</a>
             <a href="#uav" class="nav-link">UAV Systems</a>
+            <a href="#drone-research" class="nav-link">Drone Research</a>
             <a href="#actuators" class="nav-link">Actuators</a>
             <a href="#experience" class="nav-link">Experience</a>
             <button class="search-btn" id="searchBtn">
@@ -122,7 +127,7 @@
         <div class="search-container">
             <div class="search-input-wrap">
                 <i data-lucide="search"></i>
-                <input type="text" class="search-input" placeholder="Search humanoid data, actuators, Mally AI..." id="searchInput">
+                <input type="text" class="search-input" placeholder="Search humanoid, UAV, agentic AI, drone research..." id="searchInput">
                 <button class="search-close" id="searchClose">×</button>
             </div>
             <div class="search-results" id="searchResults"></div>
@@ -144,9 +149,9 @@
                 <span class="highlight">Autonomous Systems</span>
             </h1>
             <p class="hero-description">
-                Robotics Lead at <strong><a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a></strong>, building factory-embedded data collection systems for humanoid manipulation. 
-                Architecting <strong>Mally AI</strong> - an agentic framework for robot task planning. Deep expertise in 
-                <strong>UAV flight control</strong>, <strong>FOC actuators</strong>, and <strong>multi-modal robotics</strong>.
+                Robotics Lead at <strong><a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a></strong>, building factory-embedded data collection systems for humanoid manipulation.
+                Heavy user of <strong>Agentic AI</strong> for debugging, error testing, and creating many AI tools — the portfolio you are looking at was built this way. Deep expertise in
+                <strong>UAV flight control</strong>, <strong>visual navigation (VIO/SLAM)</strong>, <strong>360° autonomy</strong>, and <strong>FOC actuators</strong>.
                 Former UAV Systems Engineer with 100+ autonomous flights across multirotor, VTOL, and UGV platforms.
             </p>
             <div class="hero-stats">
@@ -448,101 +453,38 @@
         </div>
     </section>
 
-    <!-- Mally AI Section -->
-    <section class="content-section" id="mally">
+    <!-- Agentic AI Section -->
+    <section class="content-section" id="agentic-ai">
         <div class="section-header">
-            <span class="section-eyebrow">AI Framework</span>
-            <h2 class="section-title">Mally AI — Agentic Robot Control</h2>
+            <span class="section-eyebrow">How I Work</span>
+            <h2 class="section-title">Agentic AI — My Daily Driver</h2>
             <p class="section-desc">
-                Architecting Mally AI, an agentic framework enabling robots to understand natural language instructions, 
-                plan multi-step manipulation tasks, and execute with feedback loops.
+                I lean on agentic AI workflows for debugging, error testing, and generating tooling around my robotics work.
+                The portfolio you are reading, my simulation dashboards, log parsers, and a dozen one-off AI helpers were all
+                built this way. It is a force multiplier — I stay focused on robotics, the agents handle the glue.
             </p>
         </div>
 
-        <div class="mally-showcase">
-            <div class="mally-visual">
-                <div class="chat-demo">
-                    <div class="chat-header">
-                        <span class="chat-title">Mally AI Assistant</span>
-                        <span class="chat-status">Active</span>
-                    </div>
-                    <div class="chat-messages">
-                        <div class="message user">
-                            <p>Pick up the red box and place it on the blue shelf</p>
-                        </div>
-                        <div class="message ai">
-                            <p><strong>Task Understanding:</strong></p>
-                            <ul>
-                                <li>Object: red box</li>
-                                <li>Action: pick_and_place</li>
-                                <li>Target: blue shelf</li>
-                            </ul>
-                            <p><strong>Generated Plan:</strong></p>
-                            <ol>
-                                <li>Navigate to red box</li>
-                                <li>Grasp with force: 15N</li>
-                                <li>Lift 20cm</li>
-                                <li>Navigate to blue shelf</li>
-                                <li>Place and release</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i data-lucide="bug"></i>
+                <h4>Debugging & Error Testing</h4>
+                <p>Agents help me reproduce bugs, trace through unfamiliar codebases, and isolate root causes across C++, Python, ROS 2, and firmware layers.</p>
             </div>
-            <div class="mally-features">
-                <div class="feature-card">
-                    <i data-lucide="message-square"></i>
-                    <h4>Natural Language Understanding</h4>
-                    <p>LLM-based parsing of human instructions into structured robot tasks</p>
-                </div>
-                <div class="feature-card">
-                    <i data-lucide="git-branch"></i>
-                    <h4>Task Planning & Decomposition</h4>
-                    <p>Automatic breakdown of complex tasks into executable primitive actions</p>
-                </div>
-                <div class="feature-card">
-                    <i data-lucide="eye"></i>
-                    <h4>Vision-Language Grounding</h4>
-                    <p>CLIP-based alignment of language concepts to visual observations</p>
-                </div>
-                <div class="feature-card">
-                    <i data-lucide="refresh-cw"></i>
-                    <h4>Closed-Loop Execution</h4>
-                    <p>Real-time feedback with failure detection and replanning</p>
-                </div>
+            <div class="feature-card">
+                <i data-lucide="wand"></i>
+                <h4>AI Tooling I Build</h4>
+                <p>Log analyzers, flight-data dashboards, telemetry summarizers, portfolio generators — I ship small focused AI tools instead of hand-writing boilerplate.</p>
             </div>
-        </div>
-
-        <div class="mally-architecture">
-            <h3>Mally AI Architecture</h3>
-            <div class="arch-diagram">
-                <div class="arch-layer">
-                    <span class="layer-label">User Input</span>
-                    <div class="layer-box">Natural Language Instruction</div>
-                </div>
-                <div class="arch-arrow">↓</div>
-                <div class="arch-layer">
-                    <span class="layer-label">Perception</span>
-                    <div class="layer-box multi">
-                        <span>Vision Encoder</span>
-                        <span>+</span>
-                        <span>Language Encoder</span>
-                    </div>
-                </div>
-                <div class="arch-arrow">↓</div>
-                <div class="arch-layer">
-                    <span class="layer-label">Planning</span>
-                    <div class="layer-box">LLM Task Planner → Action Sequence</div>
-                </div>
-                <div class="arch-arrow">↓</div>
-                <div class="arch-layer">
-                    <span class="layer-label">Execution</span>
-                    <div class="layer-box multi">
-                        <span>Motor Commands</span>
-                        <span>← Feedback →</span>
-                        <span>State Estimation</span>
-                    </div>
-                </div>
+            <div class="feature-card">
+                <i data-lucide="layout-dashboard"></i>
+                <h4>This Portfolio</h4>
+                <p>Content, layout, and the drone simulator on this site were assembled with agentic AI assistance. I drove the direction, agents handled the scaffolding.</p>
+            </div>
+            <div class="feature-card">
+                <i data-lucide="repeat"></i>
+                <h4>Feedback Loops</h4>
+                <p>I keep humans in the loop on safety-critical flight code. Agents are my research and debugging pair — not autopilots.</p>
             </div>
         </div>
     </section>
@@ -818,7 +760,7 @@
         </div>
 
         <div class="gnc-section">
-            <h3>GNC Architecture</h3>
+            <h3>GNC Systems</h3>
             <div class="gnc-grid">
                 <div class="gnc-item">
                     <h4>Guidance</h4>
@@ -893,6 +835,76 @@
         </div>
     </section>
 
+    <!-- Drone Research Section -->
+    <section class="content-section" id="drone-research">
+        <div class="section-header">
+            <span class="section-eyebrow">Drone Research</span>
+            <h2 class="section-title">Visual Autonomy & Precision Strike</h2>
+            <p class="section-desc">
+                Personal research stack I am building around monocular + 360° visual autonomy. High-level outlines only —
+                the goal here is to show what the projects do and what my role was, not to walk through the internals.
+            </p>
+        </div>
+
+        <div class="feature-grid">
+            <div class="feature-card">
+                <i data-lucide="satellite"></i>
+                <h4>EGO-Level Navigation</h4>
+                <p>Unified visual autonomy stack that works with either a normal monocular camera or a 360° camera (Insta360 X4-style). Same pipeline handles feature tracking, VIO, SLAM, occupancy mapping, and planning.</p>
+                <p><em>My role:</em> designed the whole stack, wrote the simulation test harness, integrated it with PX4/ArduPilot through ROS 2.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="compass"></i>
+                <h4>VIO + Keyframe SLAM</h4>
+                <p>Visual-inertial odometry with keyframe-based SLAM back-end and loop-closure map correction. Runs against ground truth in Gazebo and on real flights.</p>
+                <p><em>My role:</em> end-to-end integration, tuning health gating, validating drift bounds.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="globe"></i>
+                <h4>360° Navigation</h4>
+                <p>Converts a 360° camera into six synchronized virtual cameras (cubemap projection), so the same VIO/SLAM front-end handles omnidirectional perception without special code paths.</p>
+                <p><em>My role:</em> calibration, rig design, cubemap feed plumbing inside Gazebo.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="route"></i>
+                <h4>Trajectory Planning</h4>
+                <p>Local planner with A* fallback, risk-field avoidance, and MPC-style tracking that consumes the occupancy map produced by the mapper.</p>
+                <p><em>My role:</em> planner behavior, safety-supervisor gates, offboard integration with PX4.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="box"></i>
+                <h4>3D Reconstruction</h4>
+                <p>Sparse SLAM landmarks are densified into a voxel/point-cloud map of the environment for obstacle awareness, inspection, and follow-me behaviors.</p>
+                <p><em>My role:</em> sparse-to-dense pipeline, export tooling, live visualizers.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="crosshair"></i>
+                <h4>Precision Strike (Visual Missile Strike)</h4>
+                <p>Autonomous UAV interceptor that locks onto a target using YOLO-based detection + tracking, then flies a hunt/climb/dive guidance law with proportional navigation. Deterministic lawful-targeting research, not weaponized.</p>
+                <p><em>My role:</em> guidance law, detection/tracker integration, flight testing to sub-metre impact precision.</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="eye"></i>
+                <h4>Object Detection & Tracking</h4>
+                <p>YOLO11-based detection with a lightweight IoU tracker running on the drone's front camera feed. Feeds bounding-box cues back to the planner and guidance layer.</p>
+                <p><em>My role:</em> live tracker, macOS/CUDA deployment, stability fixes (libomp, threading).</p>
+            </div>
+
+            <div class="feature-card">
+                <i data-lucide="airplay"></i>
+                <h4>PX4 / ArduPilot Adapters</h4>
+                <p>Autopilot-agnostic layer that publishes standard ROS 2 odometry, transforms, trajectories, and health messages. Adapter modules feed PX4 or ArduPilot as needed.</p>
+                <p><em>My role:</em> adapter interface, offboard bridge, SITL validation.</p>
+            </div>
+        </div>
+    </section>
+
     <!-- Experience Timeline -->
     <section class="content-section" id="experience">
         <div class="section-header">
@@ -914,9 +926,9 @@
                     <p class="timeline-location">Humanoid Data Infrastructure</p>
                     <ul class="achievements">
                         <li>Leading development of factory-embedded data collection systems for humanoid manipulation</li>
-                        <li>Architecting multi-camera capture pipeline (30K+ hours, 3M+ trajectories)</li>
+                        <li>Building multi-camera capture pipeline (30K+ hours, 3M+ trajectories)</li>
                         <li>Building pose extraction pipeline with SAM 3D + Depth Pro (10-15mm accuracy)</li>
-                        <li>Designing scalable cloud infrastructure with petabyte-scale storage</li>
+                        <li>Setting up scalable cloud infrastructure with petabyte-scale storage</li>
                     </ul>
                     <div class="tech-tags">
                         <span>Humanoid Robotics</span><span>Data Infrastructure</span><span>SAM 3D</span><span>Depth Pro</span><span>GPU Compute</span>
@@ -936,13 +948,13 @@
                     </div>
                     <p class="timeline-location">Hyderabad, India</p>
                     <ul class="achievements">
-                        <li>Built Mally AI - agentic framework for robot task planning and execution</li>
+                        <li>Used agentic AI for debugging and error testing; built multiple AI tools that power this portfolio and internal workflows</li>
                         <li>Developed FOC-based actuator systems for humanoid joints</li>
-                        <li>Architected Maritime Surveillance UAS for Indian Coast Guard</li>
+                        <li>Built Maritime Surveillance UAS for Indian Coast Guard</li>
                         <li>Engineered Tactical Loitering Munition with radar-guided interception</li>
                     </ul>
                     <div class="tech-tags">
-                        <span>Mally AI</span><span>FOC Control</span><span>PX4</span><span>Humanoid</span><span>Actuators</span>
+                        <span>Agentic AI</span><span>FOC Control</span><span>PX4</span><span>Humanoid</span><span>Actuators</span>
                     </div>
                 </div>
             </div>
@@ -1011,8 +1023,8 @@
             <span class="section-eyebrow">Connect</span>
             <h2 class="section-title">Let's Build Together</h2>
             <p class="section-desc">
-                Open to collaborations in humanoid robotics, autonomous systems, and AI-powered robot control.
-                Currently leading robotics at <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a> and building Mally AI.
+                Open to collaborations in humanoid robotics, autonomous UAVs, visual navigation, and agentic-AI-powered tooling.
+                Currently leading robotics at <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a>.
             </p>
         </div>
 
@@ -1040,7 +1052,7 @@
         <div class="footer-content">
             <p class="footer-brand">Sanjay Sparker</p>
             <p class="footer-role">Robotics Lead @ <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a> | Humanoid Data Infrastructure</p>
-            <p class="footer-meta">Building Mally AI • FOC Actuators • UAV Autopilot • 30K+ Hours Captured</p>
+            <p class="footer-meta">Agentic AI • VIO / SLAM / 360° Navigation • UAV Autopilot • FOC Actuators</p>
         </div>
     </footer>
 

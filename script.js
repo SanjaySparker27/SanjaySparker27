@@ -79,7 +79,7 @@ const SearchManager = {
     resultsContainer.innerHTML = `
       <div class="search-result-item">
         <h4>Search Results for "${query}"</h4>
-        <p>Try: humanoid, FOC, Mally AI, UAV, PX4, actuators...</p>
+        <p>Try: humanoid, FOC, agentic AI, UAV, VIO, SLAM, 360, strike, PX4, actuators...</p>
       </div>
     `;
   }
