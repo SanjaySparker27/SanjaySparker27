@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanjay Sparker — Robotics Lead | Otonomy.AI | Humanoid Data Infrastructure</title>
+    <meta name="description" content="Sanjay Sparker - Robotics Lead at Otonomy.AI specializing in Humanoid Data Infrastructure, Actuator Systems, Mally AI, and UAV Autopilot Development.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=2">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <!-- Sidebar Navigation - ArduPilot Docs Style -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="images/otonomy-logo.svg" alt="Otonomy.AI" class="sidebar-logo">
+            <span class="sidebar-title">Sanjay Sparker</span>
+            <span class="sidebar-subtitle">Robotics Lead</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <span class="nav-section-title">Current</span>
+                <a href="#current-role" class="nav-item active">
+                    <i data-lucide="briefcase"></i>
+                    <span>Otonomy.AI</span>
+                </a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Projects</span>
+                <a href="#humanoid" class="nav-item">
+                    <i data-lucide="bot"></i>
+                    <span>Humanoid Data</span>
+                </a>
+                <a href="#mally" class="nav-item">
+                    <i data-lucide="brain"></i>
+                    <span>Mally AI</span>
+                </a>
+                <a href="#actuators" class="nav-item">
+                    <i data-lucide="cpu"></i>
+                    <span>RATO Controller</span>
+                </a>
+                <a href="#uav" class="nav-item">
+                    <i data-lucide="plane"></i>
+                    <span>UAV Systems</span>
+                </a>
+                <a href="drone-sim.html" class="nav-item" target="_blank">
+                    <i data-lucide="gamepad-2"></i>
+                    <span>GS Simulator</span>
+                </a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Career</span>
+                <a href="#experience" class="nav-item">
+                    <i data-lucide="timeline"></i>
+                    <span>Experience</span>
+                </a>
+                <a href="#publications" class="nav-item">
+                    <i data-lucide="book-open"></i>
+                    <span>Publications</span>
+                </a>
+                <a href="#contact" class="nav-item">
+                    <i data-lucide="mail"></i>
+                    <span>Contact</span>
+                </a>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-stats">
+                <div class="sidebar-stat">
+                    <span class="stat-value">30K+</span>
+                    <span class="stat-label">Hours</span>
+                </div>
+                <div class="sidebar-stat">
+                    <span class="stat-value">100+</span>
+                    <span class="stat-label">Flights</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Navigation Banner - ArduPilot Style -->
+    <div class="nav-banner">
+        <div class="nav-brand">
+            <img src="images/otonomy-logo.svg" alt="Otonomy.AI" class="otonomy-logo">
+            <div class="brand-text">
+                <span class="brand-name">Sanjay Sparker</span>
+                <span class="brand-role">Robotics Lead @ <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a></span>
+            </div>
+        </div>
+        <nav class="nav-links">
+            <a href="#humanoid" class="nav-link">Humanoid</a>
+            <a href="#mally" class="nav-link">Mally AI</a>
+            <a href="#uav" class="nav-link">UAV Systems</a>
+            <a href="#actuators" class="nav-link">Actuators</a>
+            <a href="#experience" class="nav-link">Experience</a>
+            <button class="search-btn" id="searchBtn">
+                <i data-lucide="search"></i>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <button class="menu-toggle" id="menuToggle">
+            <i data-lucide="menu"></i>
+        </button>
+        <span class="mobile-brand">Sanjay Sparker</span>
+        <button class="search-toggle" id="mobileSearchToggle">
+            <i data-lucide="search"></i>
+        </button>
+    </header>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-container">
+            <div class="search-input-wrap">
+                <i data-lucide="search"></i>
+                <input type="text" class="search-input" placeholder="Search humanoid data, actuators, Mally AI..." id="searchInput">
+                <button class="search-close" id="searchClose">×</button>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="about">
+        <div class="hero-content">
+            <div class="hero-profile">
+                <img src="images/sanjay-profile.jpeg" alt="Sanjay Sparker" class="hero-avatar">
+                <div class="hero-badge">
+                    <span class="status-dot"></span>
+                    Currently @ <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a>
+                </div>
+            </div>
+            <h1 class="hero-title">
+                Building <span class="highlight">Humanoid Data Infrastructure</span> & 
+                <span class="highlight">Autonomous Systems</span>
+            </h1>
+            <p class="hero-description">
+                Robotics Lead at <strong><a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a></strong>, building factory-embedded data collection systems for humanoid manipulation. 
+                Architecting <strong>Mally AI</strong> - an agentic framework for robot task planning. Deep expertise in 
+                <strong>UAV flight control</strong>, <strong>FOC actuators</strong>, and <strong>multi-modal robotics</strong>.
+                Former UAV Systems Engineer with 100+ autonomous flights across multirotor, VTOL, and UGV platforms.
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">30K+</span>
+                    <span class="stat-label">Hours Captured</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3M+</span>
+                    <span class="stat-label">Trajectories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10-15mm</span>
+                    <span class="stat-label">Pose Accuracy</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Pipeline Active</span>
+                </div>
+            </div>
+            <div class="hero-actions">
+                <a href="#humanoid" class="btn-primary">
+                    <i data-lucide="bot"></i>
+                    View Humanoid Work
+                </a>
+                <a href="https://www.linkedin.com/in/sanjay-sparker-5679b51b3/" target="_blank" class="btn-secondary">
+                    <i data-lucide="linkedin"></i>
+                    LinkedIn
+                </a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="code-window">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">ottonomy/humanoid_data_pipeline.py</span>
+                </div>
+                <div class="code-body">
+                    <pre><code><span class="comment"># Otonomy.AI - Humanoid Data Infrastructure</span>
+<span class="comment"># Factory-embedded manipulation data collection</span>
+
+<span class="keyword">class</span> <span class="class">HumanoidDataPipeline</span>:
+    <span class="string">"""
+    30K+ hours captured | 3M+ trajectories
+    10-15mm pose accuracy | 24/7 pipeline
+    """</span>
+    
+    <span class="keyword">def</span> <span class="function">__init__</span>(self):
+        self.capture_system = MultiCameraCapture(
+            egocentric=<span class="string">"head-mounted"</span>,
+            wrist_cameras=<span class="number">2</span>,
+            mocap_ground_truth=<span class="bool">True</span>
+        )
+        self.extraction = PoseExtractionPipeline(
+            model=<span class="string">"SAM 3D + Depth Pro"</span>,
+            accuracy=<span class="string">"10-15mm"</span>
+        )
+        
+    <span class="keyword">def</span> <span class="function">process_trajectory</span>(self, video_stream):
+        <span class="comment"># 3D hand joint sequences</span>
+        depth = self.depth_estimation(video_stream)
+        pose_3d = self.sam_body_estimation(depth)
+        
+        <span class="comment"># Multi-view triangulation</span>
+        trajectory = self.temporal_smoothing(
+            self.multi_view_fusion(pose_3d)
+        )
+        
+        <span class="comment"># Physics validation</span>
+        <span class="keyword">return</span> self.biomechanical_validation(trajectory)</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Current Role: Otonomy.AI -->
+    <section class="content-section" id="current-role">
+        <div class="otonomy-header">
+            <img src="images/otonomy-logo.svg" alt="Otonomy.AI" class="otonomy-logo-large">
+        </div>
+        <div class="section-header">
+            <span class="section-eyebrow">Current Position</span>
+            <h2 class="section-title">Robotics Lead @ <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a></h2>
+            <p class="section-desc">
+                Leading the development of humanoid data infrastructure for factory-embedded manipulation data collection. 
+                Building end-to-end pipelines from video capture to training-ready trajectory datasets.
+            </p>
+        </div>
+
+        <div class="role-highlight">
+            <div class="role-card primary">
+                <div class="role-icon">
+                    <i data-lucide="database"></i>
+                </div>
+                <h3>Humanoid Data Infrastructure</h3>
+                <p>Factory-embedded data collection systems capturing 30K+ hours of manipulation data with 10-15mm pose accuracy using multi-camera capture and motion capture ground truth.</p>
+                <div class="tech-stack">
+                    <span>SAM 3D</span><span>Depth Pro</span><span>Multi-View Triangulation</span><span>MoCap</span>
+                </div>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">
+                    <i data-lucide="cpu"></i>
+                </div>
+                <h3>Trajectory Extraction Pipeline</h3>
+                <p>State-of-the-art 3D hand trajectory extraction combining pose estimation with monocular depth, temporal smoothing, and physics-based quality validation.</p>
+                <div class="tech-stack">
+                    <span>PyTorch</span><span>OpenCV</span><span>Biomechanical Validation</span>
+                </div>
+            </div>
+            <div class="role-card">
+                <div class="role-icon">
+                    <i data-lucide="cloud"></i>
+                </div>
+                <h3>Scalable Cloud Infrastructure</h3>
+                <p>GPU compute clusters with petabyte-scale storage, streaming delivery, and comprehensive API endpoints for humanoid training data access.</p>
+                <div class="tech-stack">
+                    <span>AWS/GCP</span><span>Kubernetes</span><span>GPU Compute</span><span>API Design</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Humanoid Section -->
+    <section class="content-section" id="humanoid">
+        <div class="section-header">
+            <span class="section-eyebrow">Humanoid Robotics</span>
+            <h2 class="section-title">Data Infrastructure for Humanoid Learning</h2>
+        </div>
+
+        <div class="info-block warning">
+            <div class="info-icon"><i data-lucide="alert-triangle"></i></div>
+            <div class="info-content">
+                <h4>The Humanoid Data Problem</h4>
+                <p>Humanoid robots need to learn manipulation from human demonstrations. Current approaches don't scale: teleoperation is expensive and limited to labs, simulation has sim-to-real gaps, and internet video lacks depth and ground truth.</p>
+            </div>
+        </div>
+
+        <div class="solution-grid">
+            <div class="solution-card">
+                <div class="solution-num">01</div>
+                <h3>Data Collection</h3>
+                <p>Factory-embedded researchers capturing real-world manipulation data with head-mounted egocentric cameras and dual wrist cameras integrated with motion capture.</p>
+                <ul class="feature-list">
+                    <li>Egocentric video capture</li>
+                    <li>Multi-view wrist cameras</li>
+                    <li>Motion capture ground truth</li>
+                    <li>Continuous deployment</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-num">02</div>
+                <h3>Data Processing</h3>
+                <p>Automated extraction of high-fidelity hand trajectories with state-of-the-art pose estimation and depth-enhanced extraction.</p>
+                <ul class="feature-list">
+                    <li>3D pose estimation (SAM 3D)</li>
+                    <li>Depth Pro monocular depth</li>
+                    <li>Multi-view triangulation</li>
+                    <li>Temporal smoothing</li>
+                </ul>
+            </div>
+            <div class="solution-card">
+                <div class="solution-num">03</div>
+                <h3>Data Delivery</h3>
+                <p>Training-ready trajectory datasets for humanoid robot learning systems with standardized formats and API access.</p>
+                <ul class="feature-list">
+                    <li>Standardized formats (HDF5, ROS bags)</li>
+                    <li>Task-labeled sequences</li>
+                    <li>API access endpoints</li>
+                    <li>Custom data programs</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="extraction-pipeline">
+            <h3>Research-Grade Extraction Pipeline</h3>
+            <div class="pipeline-flow">
+                <div class="pipeline-step">
+                    <div class="step-icon"><i data-lucide="video"></i></div>
+                    <span class="step-name">Video Input</span>
+                    <span class="step-desc">Raw egocentric & wrist feeds</span>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="step-icon"><i data-lucide="layers"></i></div>
+                    <span class="step-name">Depth Estimation</span>
+                    <span class="step-desc">Monocular metric depth</span>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="step-icon"><i data-lucide="user"></i></div>
+                    <span class="step-name">Pose Extraction</span>
+                    <span class="step-desc">3D body & hand mesh</span>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="step-icon"><i data-lucide="combine"></i></div>
+                    <span class="step-name">Multi-View Fusion</span>
+                    <span class="step-desc">Triangulation & smoothing</span>
+                </div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-step">
+                    <div class="step-icon"><i data-lucide="check-circle"></i></div>
+                    <span class="step-name">Physics Validation</span>
+                    <span class="step-desc">Biomechanical constraints</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- General AI Intelligence in Robotics Pipeline -->
+        <div class="ai-robotics-pipeline">
+            <h3>General AI Intelligence in Robotics</h3>
+            <p class="pipeline-intro">Building end-to-end autonomous systems that perceive, reason, and act in unstructured environments. Integrating foundation models with robotic control for general-purpose manipulation.</p>
+            
+            <div class="ai-pipeline-grid">
+                <div class="ai-pipeline-card">
+                    <div class="pipeline-num">01</div>
+                    <div class="pipeline-icon"><i data-lucide="brain"></i></div>
+                    <h4>Perception & Understanding</h4>
+                    <ul>
+                        <li><strong>Vision-Language Models:</strong> CLIP, SAM for open-vocabulary object detection</li>
+                        <li><strong>3D Scene Understanding:</strong> Neural radiance fields (NeRF), Gaussian Splatting</li>
+                        <li><strong>Affordance Prediction:</strong> Predicting grasp points and manipulation primitives</li>
+                        <li><strong>Multi-Modal Fusion:</strong> RGB-D, tactile, proprioceptive sensor integration</li>
+                    </ul>
+                </div>
+                
+                <div class="ai-pipeline-card">
+                    <div class="pipeline-num">02</div>
+                    <div class="pipeline-icon"><i data-lucide="git-branch"></i></div>
+                    <h4>Reasoning & Planning</h4>
+                    <ul>
+                        <li><strong>Foundation Model Planning:</strong> LLMs for task decomposition and sequencing</li>
+                        <li><strong>Trajectory Optimization:</strong> CHOMP, TrajOpt for collision-free motion</li>
+                        <li><strong>Symbolic Planning:</strong> PDDL-based task and motion planning (TAMP)</li>
+                        <li><strong>Reinforcement Learning:</strong> RLHF for dexterous manipulation policies</li>
+                    </ul>
+                </div>
+                
+                <div class="ai-pipeline-card">
+                    <div class="pipeline-num">03</div>
+                    <div class="pipeline-icon"><i data-lucide="hand"></i></div>
+                    <h4>Action & Control</h4>
+                    <ul>
+                        <li><strong>Impedance Control:</strong> Force-adaptive compliant manipulation</li>
+                        <li><strong>Whole-Body Control:</strong> QP-based balancing and manipulation</li>
+                        <li><strong>Learning from Demonstration:</strong> Behavioral cloning, DAgger</li>
+                        <li><strong>Sim-to-Real Transfer:</strong> Domain randomization, adaptation</li>
+                    </ul>
+                </div>
+                
+                <div class="ai-pipeline-card">
+                    <div class="pipeline-num">04</div>
+                    <div class="pipeline-icon"><i data-lucide="refresh-cw"></i></div>
+                    <h4>Learning & Adaptation</h4>
+                    <ul>
+                        <li><strong>Online Learning:</strong> Continual improvement from real-world interaction</li>
+                        <li><strong>Meta-Learning:</strong> Few-shot adaptation to new tasks</li>
+                        <li><strong>Skill Libraries:</strong> Composable primitive skill representations</li>
+                        <li><strong>Human Feedback:</strong> Interactive correction and preference learning</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="ai-stack">
+                <h4>AI Robotics Stack at <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a></h4>
+                <div class="stack-layers">
+                    <div class="stack-layer">
+                        <span class="layer-title">Foundation Models</span>
+                        <div class="layer-items">
+                            <span>GPT-4V</span><span>Claude</span><span>PaLM-E</span><span>RT-2</span>
+                        </div>
+                    </div>
+                    <div class="stack-arrow">↓</div>
+                    <div class="stack-layer">
+                        <span class="layer-title">Perception</span>
+                        <div class="layer-items">
+                            <span>SAM 3D</span><span>Depth Pro</span><span>CLIP</span><span>DINOv2</span>
+                        </div>
+                    </div>
+                    <div class="stack-arrow">↓</div>
+                    <div class="stack-layer">
+                        <span class="layer-title">Planning & Control</span>
+                        <div class="layer-items">
+                            <span>Diffusion Policy</span><span>RT-1</span><span>ACT</span><span>IL/RL</span>
+                        </div>
+                    </div>
+                    <div class="stack-arrow">↓</div>
+                    <div class="stack-layer">
+                        <span class="layer-title">Hardware Interface</span>
+                        <div class="layer-items">
+                            <span>ROS2</span><span>Isaac Sim</span><span>Mujoco</span><span>Real Robots</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mally AI Section -->
+    <section class="content-section" id="mally">
+        <div class="section-header">
+            <span class="section-eyebrow">AI Framework</span>
+            <h2 class="section-title">Mally AI — Agentic Robot Control</h2>
+            <p class="section-desc">
+                Architecting Mally AI, an agentic framework enabling robots to understand natural language instructions, 
+                plan multi-step manipulation tasks, and execute with feedback loops.
+            </p>
+        </div>
+
+        <div class="mally-showcase">
+            <div class="mally-visual">
+                <div class="chat-demo">
+                    <div class="chat-header">
+                        <span class="chat-title">Mally AI Assistant</span>
+                        <span class="chat-status">Active</span>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="message user">
+                            <p>Pick up the red box and place it on the blue shelf</p>
+                        </div>
+                        <div class="message ai">
+                            <p><strong>Task Understanding:</strong></p>
+                            <ul>
+                                <li>Object: red box</li>
+                                <li>Action: pick_and_place</li>
+                                <li>Target: blue shelf</li>
+                            </ul>
+                            <p><strong>Generated Plan:</strong></p>
+                            <ol>
+                                <li>Navigate to red box</li>
+                                <li>Grasp with force: 15N</li>
+                                <li>Lift 20cm</li>
+                                <li>Navigate to blue shelf</li>
+                                <li>Place and release</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mally-features">
+                <div class="feature-card">
+                    <i data-lucide="message-square"></i>
+                    <h4>Natural Language Understanding</h4>
+                    <p>LLM-based parsing of human instructions into structured robot tasks</p>
+                </div>
+                <div class="feature-card">
+                    <i data-lucide="git-branch"></i>
+                    <h4>Task Planning & Decomposition</h4>
+                    <p>Automatic breakdown of complex tasks into executable primitive actions</p>
+                </div>
+                <div class="feature-card">
+                    <i data-lucide="eye"></i>
+                    <h4>Vision-Language Grounding</h4>
+                    <p>CLIP-based alignment of language concepts to visual observations</p>
+                </div>
+                <div class="feature-card">
+                    <i data-lucide="refresh-cw"></i>
+                    <h4>Closed-Loop Execution</h4>
+                    <p>Real-time feedback with failure detection and replanning</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mally-architecture">
+            <h3>Mally AI Architecture</h3>
+            <div class="arch-diagram">
+                <div class="arch-layer">
+                    <span class="layer-label">User Input</span>
+                    <div class="layer-box">Natural Language Instruction</div>
+                </div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-layer">
+                    <span class="layer-label">Perception</span>
+                    <div class="layer-box multi">
+                        <span>Vision Encoder</span>
+                        <span>+</span>
+                        <span>Language Encoder</span>
+                    </div>
+                </div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-layer">
+                    <span class="layer-label">Planning</span>
+                    <div class="layer-box">LLM Task Planner → Action Sequence</div>
+                </div>
+                <div class="arch-arrow">↓</div>
+                <div class="arch-layer">
+                    <span class="layer-label">Execution</span>
+                    <div class="layer-box multi">
+                        <span>Motor Commands</span>
+                        <span>← Feedback →</span>
+                        <span>State Estimation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Actuators Section -->
+    <section class="content-section" id="actuators">
+        <div class="section-header">
+            <span class="section-eyebrow">Hardware Design</span>
+            <h2 class="section-title">FOC Actuator Systems</h2>
+            <p class="section-desc">
+                Designing high-performance actuation systems for humanoid robots including cycloidal drives, 
+                harmonic actuators, and FOC-based motor controllers with custom STM32 firmware.
+            </p>
+        </div>
+
+        <div class="actuator-grid">
+            <div class="actuator-card">
+                <div class="actuator-visual">
+                    <svg viewBox="0 0 200 200" class="actuator-svg">
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="currentColor" stroke-width="2" opacity="0.3"/>
+                        <circle cx="100" cy="100" r="60" fill="none" stroke="currentColor" stroke-width="3"/>
+                        <ellipse cx="100" cy="100" rx="40" ry="20" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="100" cy="40" r="15" fill="currentColor"/>
+                        <circle cx="160" cy="100" r="15" fill="currentColor" opacity="0.7"/>
+                        <circle cx="100" cy="160" r="15" fill="currentColor" opacity="0.4"/>
+                        <circle cx="40" cy="100" r="15" fill="currentColor" opacity="0.2"/>
+                    </svg>
+                </div>
+                <h3>Cycloidal Drive</h3>
+                <ul class="spec-list">
+                    <li><strong>Reduction Ratio:</strong> 50:1 - 160:1</li>
+                    <li><strong>Backlash:</strong> &lt; 1 arcmin (zero-backlash)</li>
+                    <li><strong>Torque Density:</strong> 50-80 Nm continuous</li>
+                    <li><strong>Efficiency:</strong> 85-92%</li>
+                    <li><strong>Transmission:</strong> Eccentric cam + cycloidal disc</li>
+                </ul>
+                <p>Zero-backlash high-ratio reduction gearbox for precision joint control. <strong>Roller contacts</strong> provide high torque density and shock resistance for humanoid applications. <strong>Harmonic alternative</strong> for compact joints.</p>
+            </div>
+
+            <div class="actuator-card featured">
+                <div class="actuator-badge">RATO</div>
+                <div class="actuator-visual rato-visual">
+                    <svg viewBox="0 0 200 200" class="actuator-svg">
+                        <!-- ODrive-style motor representation -->
+                        <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="3"/>
+                        <circle cx="100" cy="100" r="55" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="100" cy="100" r="40" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        <!-- Three phase windings -->
+                        <circle cx="100" cy="45" r="8" fill="currentColor"/>
+                        <circle cx="145" cy="122" r="8" fill="currentColor"/>
+                        <circle cx="55" cy="122" r="8" fill="currentColor"/>
+                        <!-- Center rotor -->
+                        <circle cx="100" cy="100" r="20" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+                        <!-- Rotation indicator -->
+                        <path d="M130 100 A30 30 0 0 1 100 130" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <polygon points="125,125 135,135 120,138" fill="currentColor"/>
+                    </svg>
+                </div>
+                <h3>RATO Controller</h3>
+                <p class="rato-tagline">Precision Motor Control for Humanoid Robotics</p>
+                <ul class="spec-list">
+                    <li><strong>Power:</strong> 3000W Continuous / 5kW Peak</li>
+                    <li><strong>Voltage:</strong> 14-58V (14S battery support)</li>
+                    <li><strong>Control:</strong> Torque, Velocity, Position, Trajectory</li>
+                    <li><strong>Current Loop:</strong> FOC at 20-50 kHz SVPWM</li>
+                    <li><strong>MCU:</strong> STM32H7 Dual-core ARM Cortex-M7</li>
+                    <li><strong>Feedback:</strong> Dual encoder support, 24-bit absolute</li>
+                </ul>
+                
+                <!-- RATO Minimal Workflow -->
+                <div class="rato-workflow">
+                    <h4>Control Workflow</h4>
+                    <div class="workflow-steps">
+                        <div class="workflow-step">
+                            <span class="step-num">1</span>
+                            <span class="step-name">Encoder</span>
+                            <span class="step-detail">Position/Velocity Feedback</span>
+                        </div>
+                        <div class="workflow-arrow">→</div>
+                        <div class="workflow-step">
+                            <span class="step-num">2</span>
+                            <span class="step-name">FOC</span>
+                            <span class="step-detail">Field-Oriented Control</span>
+                        </div>
+                        <div class="workflow-arrow">→</div>
+                        <div class="workflow-step">
+                            <span class="step-num">3</span>
+                            <span class="step-name">SVPWM</span>
+                            <span class="step-detail">3-Phase Inverter</span>
+                        </div>
+                        <div class="workflow-arrow">→</div>
+                        <div class="workflow-step">
+                            <span class="step-num">4</span>
+                            <span class="step-name">Motor</span>
+                            <span class="step-detail">Smooth Torque Output</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="rato-features">
+                    <div class="rato-feature"><i data-lucide="zap"></i> Regenerative Braking</div>
+                    <div class="rato-feature"><i data-lucide="shield"></i> Isolated CAN/UART</div>
+                    <div class="rato-feature"><i data-lucide="activity"></i> Model Feed-Forward</div>
+                    <div class="rato-feature"><i data-lucide="cpu"></i> ROS2 Integration</div>
+                </div>
+            </div>
+
+            <div class="actuator-card">
+                <div class="actuator-visual">
+                    <svg viewBox="0 0 200 200" class="actuator-svg">
+                        <rect x="60" y="60" width="80" height="80" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="100" cy="100" r="30" fill="currentColor" opacity="0.8"/>
+                        <path d="M60 60 L100 100 L140 60" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                        <path d="M60 140 L100 100 L140 140" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+                    </svg>
+                </div>
+                <h3>Magnetic Encoder</h3>
+                <ul class="spec-list">
+                    <li><strong>Resolution:</strong> 24-bit (16,777,216 counts/rev)</li>
+                    <li><strong>Accuracy:</strong> ±0.01° (±36 arcsec)</li>
+                    <li><strong>Interface:</strong> SPI / BiSS-C</li>
+                    <li><strong>Update Rate:</strong> 100 kHz</li>
+                    <li><strong>Sensor:</strong> TMR (Tunnel Magnetoresistance)</li>
+                </ul>
+                <p>High-resolution absolute position feedback for <strong>closed-loop FOC control</strong>. <strong>Sin/Cos interpolation</strong> with error compensation. Critical for <strong>servo-grade precision</strong> in humanoid joints.</p>
+            </div>
+        </div>
+
+        <div class="foc-explanation">
+            <h3>Field-Oriented Control (FOC) - Vector Control</h3>
+            <p>FOC provides <strong>smooth torque control</strong> for brushless motors by decoupling torque and flux components via <strong>dq-transformation</strong>. Enables servo-grade precision with <strong>zero-speed torque holding</strong>.</p>
+            
+            <div class="foc-equations">
+                <div class="equation-box">
+                    <h4>Clarke Transform (3φ → 2φ)</h4>
+                    <code>Iα = Ia<br>Iβ = (Ia + 2Ib) / √3</code>
+                    <p>Converts 3-phase currents to stationary αβ reference frame</p>
+                </div>
+                <div class="equation-box">
+                    <h4>Park Transform (αβ → dq)</h4>
+                    <code>Id = Iα·cos(θ) + Iβ·sin(θ)<br>Iq = -Iα·sin(θ) + Iβ·cos(θ)</code>
+                    <p>Rotates to rotor-aligned dq frame. <strong>Id</strong> = flux, <strong>Iq</strong> = torque</p>
+                </div>
+            </div>
+
+            <ol class="ordered-list">
+                <li><strong>Clarke Transform:</strong> Convert 3-phase currents (Ia, Ib, Ic) to stationary 2-phase (Iα, Iβ) frame</li>
+                <li><strong>Park Transform:</strong> Rotate to rotor-aligned dq-frame. <strong>Id</strong> controls rotor flux, <strong>Iq</strong> controls torque</li>
+                <li><strong>Current Control:</strong> Independent PI controllers for Id (flux) and Iq (torque) with decoupling</li>
+                <li><strong>Inverse Park:</strong> Convert voltage commands Vd, Vq back to αβ stationary frame</li>
+                <li><strong>SVPWM:</strong> Space Vector PWM generates optimal 3-phase switching with 15% better DC utilization</li>
+            </ol>
+            
+            <div class="foc-benefits">
+                <h4>Benefits over Trapezoidal Control:</h4>
+                <ul>
+                    <li>✓ <strong>Smooth torque</strong> - No torque ripple at commutation</li>
+                    <li>✓ <strong>Full speed range</strong> - Field weakening for >base speed operation</li>
+                    <li>✓ <strong>Zero-speed holding</strong> - Full torque at standstill</li>
+                    <li>✓ <strong>Efficiency</strong> - Optimal current utilization via vector control</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- UAV Systems Section -->
+    <section class="content-section" id="uav">
+        <div class="section-header">
+            <span class="section-eyebrow">UAV Systems</span>
+            <h2 class="section-title">Flight Control & Autopilot</h2>
+            <p class="section-desc">
+                Former UAV Systems Engineer with 100+ autonomous flights. Expert in PX4/ArduPilot firmware, 
+                GNC systems, and mission-critical autonomous operations.
+            </p>
+            <div class="uav-image-wrapper">
+                <img src="images/drone-uav.jpeg" alt="UAV Drone Project" class="uav-project-image">
+            </div>
+        </div>
+
+        <div class="platform-tabs">
+            <button class="tab-btn active" data-tab="multicopter">Multicopter</button>
+            <button class="tab-btn" data-tab="fixedwing">Fixed-Wing</button>
+            <button class="tab-btn" data-tab="vtol">VTOL</button>
+            <button class="tab-btn" data-tab="ugv">UGV/USV</button>
+        </div>
+
+        <div class="tab-content active" data-content="multicopter">
+            <div class="project-showcase">
+                <div class="showcase-content">
+                    <h3>Fiber-Optic Tethered Drone</h3>
+                    <p>GPS-denied navigation system with IP-over-Ethernet at 1000 Mbps over 5-15 km optical fiber spool. Implements <strong>Visual-Inertial Navigation System (VINS)</strong> with <strong>Extended Kalman Filter (EKF)</strong> for sensor fusion.</p>
+                    <ul class="tech-details">
+                        <li><strong>Control System:</strong> Custom VINS with EKF3 state estimation for NED↔WGS84 transformation</li>
+                        <li><strong>Perception:</strong> CNN-based monocular depth estimation (Depth Pro) for obstacle detection</li>
+                        <li><strong>Compute:</strong> Jetson NX Orin with CUDA-accelerated inference</li>
+                        <li><strong>Accuracy:</strong> &lt;5m positional accuracy in GPS-denied urban canyons</li>
+                        <li><strong>Communication:</strong> IP-over-Ethernet fiber optic with 15km range</li>
+                        <li><strong>Navigation:</strong> SLAM-based localization with loop closure</li>
+                    </ul>
+                </div>
+                <div class="showcase-specs">
+                    <div class="spec-row"><span>Data Link</span><span>1000 Mbps</span></div>
+                    <div class="spec-row"><span>Range</span><span>15 km</span></div>
+                    <div class="spec-row"><span>Compute</span><span>Jetson NX Orin</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" data-content="fixedwing">
+            <div class="project-showcase">
+                <div class="showcase-content">
+                    <h3>Tactical Loitering Munition (TLM)</h3>
+                    <p>Radar-guided autonomous interception system with tandem-wing airframe, elevon control surfaces, and <strong>proportional navigation guidance</strong>. Tube-launched from pressurized system with <strong>high-G acceleration handling</strong>.</p>
+                    <ul class="tech-details">
+                        <li><strong>Control System:</strong> Elevon mixing for roll/pitch control with stability augmentation</li>
+                        <li><strong>Guidance:</strong> Proportional navigation with radar + point-cloud sensor fusion</li>
+                        <li><strong>Navigation:</strong> Offboard NED local frame with quaternion attitude estimation</li>
+                        <li><strong>Launch:</strong> Tube-launch from pressurized system (high-G handling)</li>
+                        <li><strong>Targeting:</strong> Ground-based radar with Kalman filter tracking</li>
+                        <li><strong>Autopilot:</strong> Custom PX4 module for tube-launch dynamics</li>
+                    </ul>
+                </div>
+                <div class="showcase-specs">
+                    <div class="spec-row"><span>Guidance</span><span>Radar + Point-cloud</span></div>
+                    <div class="spec-row"><span>Launch</span><span>Tube, pressurized</span></div>
+                    <div class="spec-row"><span>Navigation</span><span>NED local frame</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" data-content="vtol">
+            <div class="project-showcase">
+                <div class="showcase-content">
+                    <h3>Hybrid VTOL Delivery Platform</h3>
+                    <p>Autonomous delivery quadcopter with <strong>12 kg payload capacity</strong> and <strong>70-minute endurance</strong> for mountainous logistics in Western Ghats. Features transition control between hover and forward flight.</p>
+                    <ul class="tech-details">
+                        <li><strong>Control System:</strong> Transition controller with tilt-rotor mechanism</li>
+                        <li><strong>Hover:</strong> Multicopter mode with attitude stabilization</li>
+                        <li><strong>Cruise:</strong> Fixed-wing mode with TECS energy management</li>
+                        <li><strong>Navigation:</strong> LiDAR-based obstacle avoidance with path replanning</li>
+                        <li><strong>Communication:</strong> 900 MHz RHCP antennas (20+ km LOS)</li>
+                        <li><strong>Sensors:</strong> Velodyne LiDAR + EOIR for SLAM</li>
+                    </ul>
+                </div>
+                <div class="showcase-specs">
+                    <div class="spec-row"><span>Payload</span><span>12 kg</span></div>
+                    <div class="spec-row"><span>Endurance</span><span>70 min</span></div>
+                    <div class="spec-row"><span>Range</span><span>20+ km</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" data-content="ugv">
+            <div class="project-showcase">
+                <div class="showcase-content">
+                    <h3>Autonomous Ground Vehicle (UGV)</h3>
+                    <p>Ackermann-steered rover with <strong>45 kg payload</strong> using eBike hub motor and STM32 PWM control. <strong>6-DOF manipulator</strong> for pick-and-place with ROS2 middleware.</p>
+                    <ul class="tech-details">
+                        <li><strong>Control System:</strong> Ackermann steering with STM32 PWM control</li>
+                        <li><strong>Perception:</strong> Realsense D435 + 2D LiDAR for odometry</li>
+                        <li><strong>AI:</strong> YOLO v7 on Jetson Nano for FOD classification</li>
+                        <li><strong>Manipulator:</strong> 6-DOF arm with inverse kinematics</li>
+                        <li><strong>Middleware:</strong> ROS2 DDS for distributed control</li>
+                        <li><strong>Navigation:</strong> SLAM with AMCL localization</li>
+                    </ul>
+                </div>
+                <div class="showcase-specs">
+                    <div class="spec-row"><span>Payload</span><span>45 kg</span></div>
+                    <div class="spec-row"><span>Steering</span><span>Ackermann</span></div>
+                    <div class="spec-row"><span>Manipulator</span><span>6-DOF</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="gnc-section">
+            <h3>GNC Architecture</h3>
+            <div class="gnc-grid">
+                <div class="gnc-item">
+                    <h4>Guidance</h4>
+                    <ul>
+                        <li>Dubins path planning</li>
+                        <li>Trajectory optimization</li>
+                        <li>Proportional navigation</li>
+                        <li>Geofencing enforcement</li>
+                    </ul>
+                </div>
+                <div class="gnc-item">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li>EKF3 state estimation (24 states)</li>
+                        <li>GPS-denied VINS</li>
+                        <li>RTK positioning (cm-level)</li>
+                        <li>NED↔WGS84 transforms</li>
+                    </ul>
+                </div>
+                <div class="gnc-item">
+                    <h4>Control</h4>
+                    <ul>
+                        <li>Quaternion attitude control</li>
+                        <li>PIV position control</li>
+                        <li>TECS energy management</li>
+                        <li>Gain scheduling</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ground Station Simulation -->
+        <div class="simulation-showcase" id="simulation">
+            <div class="sim-header">
+                <span class="sim-badge">INTERACTIVE</span>
+                <h3>Ground Station Software Simulation Interface</h3>
+                <p>Professional UAV ground control station with real-time telemetry, mission planning, and flight simulation</p>
+            </div>
+            <div class="sim-preview">
+                <div class="sim-screen">
+                    <div class="sim-hud">
+                        <div class="hud-top">
+                            <span>⚡ QGS Pro</span>
+                            <span class="hud-status">SYSTEM READY</span>
+                        </div>
+                        <div class="hud-center">
+                            <div class="crosshair"></div>
+                        </div>
+                        <div class="hud-bottom">
+                            <span>ALT: 0.0m</span>
+                            <span>SPD: 0.0m/s</span>
+                            <span>BAT: 100%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sim-info">
+                    <h4>Features</h4>
+                    <ul>
+                        <li><strong>Real-time Telemetry:</strong> GPS, attitude, battery, speed monitoring</li>
+                        <li><strong>Mission Planning:</strong> Click-to-add waypoints with auto-navigation</li>
+                        <li><strong>Multiple Views:</strong> Map, FPV, and split-screen modes</li>
+                        <li><strong>Virtual Joysticks:</strong> Manual control with on-screen or keyboard input</li>
+                        <li><strong>Flight Modes:</strong> STABILIZE, ALT_HOLD, LOITER, AUTO, RTL</li>
+                        <li><strong>OSD Overlay:</strong> Professional heads-up display</li>
+                    </ul>
+                    <a href="drone-sim.html" target="_blank" class="sim-launch-btn">
+                        <span>🎮 Launch Simulator</span>
+                        <small>Keyboard: WASD + Arrows, SPACE to arm</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Timeline -->
+    <section class="content-section" id="experience">
+        <div class="section-header">
+            <span class="section-eyebrow">Career</span>
+            <h2 class="section-title">Professional Experience</h2>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item current">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div>
+                            <h3>Robotics Lead</h3>
+                            <span class="company"><a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a></span>
+                        </div>
+                        <span class="date">2025 – Present</span>
+                    </div>
+                    <p class="timeline-location">Humanoid Data Infrastructure</p>
+                    <ul class="achievements">
+                        <li>Leading development of factory-embedded data collection systems for humanoid manipulation</li>
+                        <li>Architecting multi-camera capture pipeline (30K+ hours, 3M+ trajectories)</li>
+                        <li>Building pose extraction pipeline with SAM 3D + Depth Pro (10-15mm accuracy)</li>
+                        <li>Designing scalable cloud infrastructure with petabyte-scale storage</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span>Humanoid Robotics</span><span>Data Infrastructure</span><span>SAM 3D</span><span>Depth Pro</span><span>GPU Compute</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div>
+                            <h3>AI & Robotics Engineer</h3>
+                            <span class="company">Zebu Intelligent Systems</span>
+                        </div>
+                        <span class="date">2024 – 2025</span>
+                    </div>
+                    <p class="timeline-location">Hyderabad, India</p>
+                    <ul class="achievements">
+                        <li>Built Mally AI - agentic framework for robot task planning and execution</li>
+                        <li>Developed FOC-based actuator systems for humanoid joints</li>
+                        <li>Architected Maritime Surveillance UAS for Indian Coast Guard</li>
+                        <li>Engineered Tactical Loitering Munition with radar-guided interception</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span>Mally AI</span><span>FOC Control</span><span>PX4</span><span>Humanoid</span><span>Actuators</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div>
+                            <h3>UAV Systems Engineer</h3>
+                            <span class="company">Various (Zebu, Autosky, Garuda, Nevar)</span>
+                        </div>
+                        <span class="date">2022 – 2024</span>
+                    </div>
+                    <p class="timeline-location">Multi-location India Operations</p>
+                    <ul class="achievements">
+                        <li>100+ autonomous flights across multirotor, VTOL, UGV, USV platforms</li>
+                        <li>>95% mission success rate with FMEA-validated systems</li>
+                        <li>Designed Fiber-Tethered, Dock-Charging, and VTOL Delivery systems</li>
+                        <li>Published IEEE paper on APM 2.8 healthcare drone systems</li>
+                    </ul>
+                    <div class="tech-tags">
+                        <span>PX4</span><span>ArduPilot</span><span>GNC</span><span>EKF3</span><span>MAVLink</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications & Awards -->
+    <section class="content-section" id="publications">
+        <div class="section-header">
+            <span class="section-eyebrow">Recognition</span>
+            <h2 class="section-title">Publications & Awards</h2>
+        </div>
+
+        <div class="publication-card">
+            <div class="pub-badge">IEEE</div>
+            <div class="pub-content">
+                <h3>Design and Development of APM 2.8 Controller-Based Healthcare Application Drone System</h3>
+                <p class="pub-venue">International Conference on Circuit, Power and Computing Technologies (ICCPCT) | August 2023</p>
+                <p class="pub-doi">DOI: 10.1109/ICCPCT58313.2023.10245325</p>
+                <p>System architecture using Pixhawk 6C + GSM/5G modem + Firebase AWS backend for warehouse goods management.</p>
+            </div>
+        </div>
+
+        <div class="awards-grid">
+            <div class="award-item">
+                <span class="award-rank">1st</span>
+                <p>Robo War Competition, JNNCE Karnataka</p>
+            </div>
+            <div class="award-item">
+                <span class="award-rank">1st</span>
+                <p>Fixed-Wing Aircraft Design, Anna University</p>
+            </div>
+            <div class="award-item">
+                <span class="award-rank">★</span>
+                <p>Year Achiever Award - Autonomous Boat, PTU</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="content-section" id="contact">
+        <div class="section-header">
+            <span class="section-eyebrow">Connect</span>
+            <h2 class="section-title">Let's Build Together</h2>
+            <p class="section-desc">
+                Open to collaborations in humanoid robotics, autonomous systems, and AI-powered robot control.
+                Currently leading robotics at <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a> and building Mally AI.
+            </p>
+        </div>
+
+        <div class="contact-grid">
+            <a href="mailto:sanjaysparker27@gmail.com" class="contact-card">
+                <i data-lucide="mail"></i>
+                <h3>Email</h3>
+                <p>sanjaysparker27@gmail.com</p>
+            </a>
+            <a href="tel:+919003811042" class="contact-card">
+                <i data-lucide="phone"></i>
+                <h3>Phone</h3>
+                <p>+91 90038 11042</p>
+            </a>
+            <a href="https://www.linkedin.com/in/sanjay-sparker-5679b51b3/" target="_blank" class="contact-card">
+                <i data-lucide="linkedin"></i>
+                <h3>LinkedIn</h3>
+                <p>in/sanjay-sparker</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="content-footer">
+        <div class="footer-content">
+            <p class="footer-brand">Sanjay Sparker</p>
+            <p class="footer-role">Robotics Lead @ <a href="https://www.otonomy.ai" target="_blank" class="otonomy-link">Otonomy.AI</a> | Humanoid Data Infrastructure</p>
+            <p class="footer-meta">Building Mally AI • FOC Actuators • UAV Autopilot • 30K+ Hours Captured</p>
+        </div>
+    </footer>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="aiFab">
+        <button class="fab-btn" id="fabBtn">
+            <i data-lucide="bot"></i>
+        </button>
+    </div>
+
+    <script src="script.js?v=2"></script>
+</body>
+</html>

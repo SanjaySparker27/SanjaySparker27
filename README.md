@@ -6,7 +6,7 @@
 
 ### 🤖 Robotics Lead @ Otonomy.AI | Humanoid Data Infrastructure
 
-[![Portfolio](https://img.shields.io/badge/🌐_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/)
+[![Portfolio](https://img.shields.io/badge/🌐_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sanjaysparker27.github.io/SanjaySparker27/)
 [![LinkedIn](https://img.shields.io/badge/🔗_LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sanjay-sparker-5679b51b3/)
 [![Email](https://img.shields.io/badge/📧_Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sanjaysparker27@gmail.com)
 
@@ -145,7 +145,7 @@
 <tr>
 <td width="50%">
 
-#### 🔧 [RATO Controller](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#actuators)
+#### 🔧 [RATO Controller](https://sanjaysparker27.github.io/SanjaySparker27/#actuators)
 ```
 Precision FOC Motor Controller
 ├── 3000W Continuous / 5kW Peak
@@ -155,7 +155,7 @@ Precision FOC Motor Controller
 └── ROS2 & CAN interface
 ```
 
-#### 🤖 [Agentic AI](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#agentic-ai)
+#### 🤖 [Agentic AI](https://sanjaysparker27.github.io/SanjaySparker27/#agentic-ai)
 ```
 Agentic Robot Control Framework
 ├── LLM Task Planning
@@ -167,7 +167,7 @@ Agentic Robot Control Framework
 </td>
 <td width="50%">
 
-#### 🚁 [Tactical Loitering Munition](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#uav)
+#### 🚁 [Tactical Loitering Munition](https://sanjaysparker27.github.io/SanjaySparker27/#uav)
 ```
 Radar-Guided Interception
 ├── Proportional Navigation (TPN v3)
@@ -176,7 +176,7 @@ Radar-Guided Interception
 └── Custom PX4 Module
 ```
 
-#### 🎯 [Fiber-Tethered Drone](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#uav)
+#### 🎯 [Fiber-Tethered Drone](https://sanjaysparker27.github.io/SanjaySparker27/#uav)
 ```
 GPS-Denied Navigation
 ├── VINS + EKF3 Fusion
@@ -194,7 +194,7 @@ Monocular + 360° Visual Autonomy
 └── PX4/ArduPilot adapters
 ```
 
-#### 💥 [Visual Missile Strike](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#strike)
+#### 💥 [Visual Missile Strike](https://sanjaysparker27.github.io/SanjaySparker27/#strike)
 ```
 Autonomous UAV Interceptor
 ├── TPN v3 + YOLOv11 target lock
@@ -244,7 +244,7 @@ Autonomous UAV Interceptor
 
 <div align="center">
 
-[![Portfolio](https://img.shields.io/badge/🌐_View_My_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/)
+[![Portfolio](https://img.shields.io/badge/🌐_View_My_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sanjaysparker27.github.io/SanjaySparker27/)
 [![LinkedIn](https://img.shields.io/badge/🔗_Connect_on_LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sanjay-sparker-5679b51b3/)
 [![Email](https://img.shields.io/badge/📧_Send_Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sanjaysparker27@gmail.com)
 [![Phone](https://img.shields.io/badge/📱_Call_Me-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](tel:+919003811042)

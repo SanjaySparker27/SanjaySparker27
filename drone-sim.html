@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ground Station Simulation Interface | Sanjay Sparker</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@7.5.2/ol.css">
+    <script src="https://cdn.jsdelivr.net/npm/ol@7.5.2/dist/ol.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top Bar - ArduPilot Style */
+        .top-bar {
+            height: 50px;
+            background: linear-gradient(180deg, #1a1a2e 0%, #16162a 100%);
+            border-bottom: 2px solid #f7941d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .gs-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .gs-title h1 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #f7941d;
+            letter-spacing: 1px;
+        }
+
+        .gs-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #27ae60;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #27ae60;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .gs-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .gs-btn {
+            padding: 8px 16px;
+            background: #242444;
+            border: 1px solid rgba(247, 148, 29, 0.3);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .gs-btn:hover {
+            background: rgba(247, 148, 29, 0.2);
+            border-color: #f7941d;
+        }
+
+        .gs-btn.primary {
+            background: #f7941d;
+            border-color: #f7941d;
+        }
+
+        .gs-btn.primary:hover {
+            background: #e8850a;
+        }
+
+        .gs-btn.danger {
+            background: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        /* Main Layout */
+        .gs-container {
+            display: grid;
+            grid-template-columns: 260px 1fr 260px;
+            height: calc(100vh - 50px);
+            min-height: calc(100vh - 50px);
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* Left Panel - Telemetry */
+        .telemetry-panel {
+            background: #12121a;
+            border-right: 1px solid rgba(255,255,255,0.05);
+            padding: 16px;
+            overflow-y: auto;
+            min-width: 260px;
+            max-width: 260px;
+        }
+
+        .panel-section {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .panel-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #7a7a9d;
+            margin-bottom: 12px;
+        }
+
+        .telemetry-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .telemetry-item {
+            background: rgba(255,255,255,0.03);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .telemetry-label {
+            font-size: 10px;
+            color: #7a7a9d;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .telemetry-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #f7941d;
+        }
+
+        .telemetry-unit {
+            font-size: 11px;
+            color: #7a7a9d;
+            margin-left: 2px;
+        }
+
+        /* Attitude Indicator */
+        .attitude-container {
+            width: 100%;
+            aspect-ratio: 1;
+            background: rgba(0,0,0,0.3);
+            border-radius: 50%;
+            position: relative;
+            border: 2px solid rgba(247, 148, 29, 0.3);
+            overflow: hidden;
+        }
+
+        .attitude-horizon {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            left: -50%;
+            top: -50%;
+            background: linear-gradient(180deg, #3498db 0%, #3498db 50%, #8b4513 50%, #8b4513 100%);
+            transform-origin: center;
+        }
+
+        .attitude-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .attitude-markers {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .attitude-plane {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 20px;
+        }
+
+        .attitude-plane::before,
+        .attitude-plane::after {
+            content: '';
+            position: absolute;
+            height: 2px;
+            background: #f7941d;
+            top: 50%;
+        }
+
+        .attitude-plane::before {
+            left: 0;
+            width: 25px;
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .attitude-plane::after {
+            right: 0;
+            width: 25px;
+            transform: translateY(-50%) rotate(15deg);
+        }
+
+        /* Center - Map/Video */
+        .main-view {
+            position: relative;
+            background: #0d1117;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        #simCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .view-controls {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            display: flex;
+            gap: 8px;
+            z-index: 10000 !important;
+            pointer-events: auto;
+        }
+        
+        /* Ensure view controls are always on top */
+        .main-view {
+            position: relative;
+        }
+        
+        .main-view .view-controls {
+            z-index: 10000;
+        }
+        
+        /* OpenLayers controls behind our controls */
+        .ol-control {
+            z-index: 100 !important;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.7);
+            border: 1px solid rgba(247, 148, 29, 0.3);
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .view-btn.active {
+            background: rgba(247, 148, 29, 0.3);
+            border-color: #f7941d;
+        }
+
+        /* OSD Overlay */
+        .osd-overlay {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            text-shadow: 0 0 4px rgba(0,0,0,0.8);
+        }
+
+        .osd-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 4px;
+        }
+
+        .osd-label {
+            color: #7a7a9d;
+        }
+
+        .osd-value {
+            color: #f7941d;
+            font-weight: 700;
+        }
+
+        .osd-value.warning {
+            color: #f39c12;
+        }
+
+        .osd-value.critical {
+            color: #e74c3c;
+            animation: blink 0.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Right Panel - Controls */
+        .controls-panel {
+            background: #12121a;
+            border-left: 1px solid rgba(255,255,255,0.05);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            min-width: 260px;
+            max-width: 260px;
+        }
+
+        /* Virtual Joysticks */
+        .joysticks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .joystick {
+            aspect-ratio: 1;
+            background: rgba(255,255,255,0.03);
+            border: 2px solid rgba(247, 148, 29, 0.2);
+            border-radius: 50%;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .joystick-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: #7a7a9d;
+            text-transform: uppercase;
+        }
+
+        .joystick-handle {
+            position: absolute;
+            width: 40%;
+            height: 40%;
+            background: radial-gradient(circle, #f7941d 0%, #e8850a 100%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px rgba(247, 148, 29, 0.5);
+            transition: transform 0.1s;
+        }
+
+        .joystick-center {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Mission Controls */
+        .mission-controls {
+            flex: 1;
+        }
+
+        .waypoint-list {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .waypoint-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 4px;
+            margin-bottom: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .waypoint-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .wp-num {
+            width: 20px;
+            height: 20px;
+            background: #f7941d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #000;
+        }
+
+        .wp-coords {
+            flex: 1;
+            color: #b8b8d1;
+        }
+
+        .wp-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .wp-btn {
+            width: 24px;
+            height: 24px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #7a7a9d;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .wp-btn:hover {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        /* Keyboard Controls Info */
+        .keyboard-info {
+            background: rgba(247, 148, 29, 0.05);
+            border: 1px solid rgba(247, 148, 29, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: auto;
+        }
+
+        .keyboard-info h4 {
+            font-size: 11px;
+            color: #f7941d;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .key-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 11px;
+            color: #7a7a9d;
+        }
+
+        .key {
+            padding: 2px 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Log Console */
+        .log-console {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 276px;
+            height: 120px;
+            background: rgba(0,0,0,0.85);
+            border: 1px solid rgba(247, 148, 29, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            overflow-y: auto;
+            max-width: calc(100% - 292px);
+        }
+
+        .log-entry {
+            margin-bottom: 4px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .log-time {
+            color: #7a7a9d;
+        }
+
+        .log-level {
+            font-weight: 700;
+        }
+
+        .log-level.info { color: #3498db; }
+        .log-level.warn { color: #f39c12; }
+        .log-level.error { color: #e74c3c; }
+        .log-level.success { color: #27ae60; }
+
+        .log-message {
+            color: #b8b8d1;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .gs-container {
+                grid-template-columns: 200px 1fr 200px;
+            }
+            .telemetry-panel, .controls-panel {
+                min-width: 200px;
+                max-width: 200px;
+            }
+            .log-console {
+                right: 216px;
+                max-width: calc(100% - 232px);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .gs-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr;
+            }
+            
+            .telemetry-panel,
+            .controls-panel {
+                display: none;
+            }
+            
+            .log-console {
+                right: 16px;
+                max-width: calc(100% - 32px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="gs-title">
+            <h1>⚡ QGS Pro - Ground Station</h1>
+            <div class="gs-status">
+                <span class="status-indicator"></span>
+                <span>SYSTEM READY</span>
+            </div>
+        </div>
+        <div class="gs-actions">
+            <button class="gs-btn" onclick="sim.clearWaypoints()">Clear WP</button>
+            <button class="gs-btn" onclick="sim.toggleMission()">Auto Mission</button>
+            <button class="gs-btn primary" onclick="sim.armDisarm()" id="armBtn">ARM</button>
+            <button class="gs-btn danger" onclick="sim.emergencyStop()">ESTOP</button>
+            <button class="gs-btn" onclick="window.location.href='index.html#simulation'">← Back</button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="gs-container">
+        <!-- Left Panel - Telemetry -->
+        <div class="telemetry-panel">
+            <div class="panel-section">
+                <div class="panel-title">Flight Telemetry</div>
+                <div class="telemetry-grid">
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Altitude</div>
+                        <div class="telemetry-value">
+                            <span id="altitude">0.0</span>
+                            <span class="telemetry-unit">m</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Speed</div>
+                        <div class="telemetry-value">
+                            <span id="speed">0.0</span>
+                            <span class="telemetry-unit">m/s</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Distance</div>
+                        <div class="telemetry-value">
+                            <span id="distance">0.0</span>
+                            <span class="telemetry-unit">m</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Battery</div>
+                        <div class="telemetry-value">
+                            <span id="battery">100</span>
+                            <span class="telemetry-unit">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-title">Attitude</div>
+                <div class="attitude-container" id="attitudeIndicator">
+                    <div class="attitude-horizon" id="horizon"></div>
+                    <div class="attitude-overlay">
+                        <div class="attitude-plane"></div>
+                    </div>
+                </div>
+                <div class="telemetry-grid" style="margin-top: 12px;">
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Roll</div>
+                        <div class="telemetry-value">
+                            <span id="roll">0</span>
+                            <span class="telemetry-unit">°</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Pitch</div>
+                        <div class="telemetry-value">
+                            <span id="pitch">0</span>
+                            <span class="telemetry-unit">°</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Yaw</div>
+                        <div class="telemetry-value">
+                            <span id="yaw">0</span>
+                            <span class="telemetry-unit">°</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Heading</div>
+                        <div class="telemetry-value">
+                            <span id="heading">N</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-title">GPS Status</div>
+                <div class="telemetry-grid">
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Sats</div>
+                        <div class="telemetry-value">
+                            <span id="sats">12</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">HDOP</div>
+                        <div class="telemetry-value">
+                            <span id="hdop">0.8</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Lat</div>
+                        <div class="telemetry-value" style="font-size: 12px;">
+                            <span id="lat">12.97</span>
+                        </div>
+                    </div>
+                    <div class="telemetry-item">
+                        <div class="telemetry-label">Lon</div>
+                        <div class="telemetry-value" style="font-size: 12px;">
+                            <span id="lon">77.59</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section">
+                <div class="panel-title">Flight Mode</div>
+                <div class="telemetry-item">
+                    <div class="telemetry-value" style="font-size: 14px; color: #27ae60;">
+                        <span id="flightMode">STABILIZE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center - Main View -->
+        <div class="main-view">
+            <canvas id="simCanvas"></canvas>
+            <div id="threeContainer" style="position: absolute; inset: 0; display: none;"></div>
+            <div id="mapContainer" style="position: absolute; inset: 0; display: block; z-index: 1;"></div>
+
+            <div class="view-controls">
+                <button class="view-btn active" onclick="sim.setView('map')">🗺️ 2D Map</button>
+                <button class="view-btn" onclick="sim.setView('3d')">🌐 3D Map</button>
+                <button class="view-btn" onclick="sim.setView('fpv')">📷 FPV</button>
+                <button class="view-btn" onclick="sim.setView('split')">⊕ Split</button>
+            </div>
+
+            <div class="osd-overlay">
+                <div class="osd-item">
+                    <span class="osd-label">ALT:</span>
+                    <span class="osd-value" id="osdAlt">0.0m</span>
+                </div>
+                <div class="osd-item">
+                    <span class="osd-label">SPD:</span>
+                    <span class="osd-value" id="osdSpd">0.0m/s</span>
+                </div>
+                <div class="osd-item">
+                    <span class="osd-label">BAT:</span>
+                    <span class="osd-value" id="osdBat">100%</span>
+                </div>
+                <div class="osd-item">
+                    <span class="osd-label">GPS:</span>
+                    <span class="osd-value" id="osdGps">3D FIX</span>
+                </div>
+                <div class="osd-item">
+                    <span class="osd-label">MODE:</span>
+                    <span class="osd-value" id="osdMode">STAB</span>
+                </div>
+            </div>
+
+            <div class="log-console" id="logConsole">
+                <div class="log-entry">
+                    <span class="log-time">00:00:00</span>
+                    <span class="log-level info">[INFO]</span>
+                    <span class="log-message">Ground Station initialized</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">00:00:00</span>
+                    <span class="log-level success">[OK]</span>
+                    <span class="log-message">Telemetry link established</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-time">00:00:00</span>
+                    <span class="log-level info">[INFO]</span>
+                    <span class="log-message">GPS: 12 satellites, HDOP: 0.8</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Controls -->
+        <div class="controls-panel">
+            <div class="panel-section">
+                <div class="panel-title">Manual Control</div>
+                <div class="joysticks">
+                    <div class="joystick" id="leftStick">
+                        <span class="joystick-label">Throttle/Yaw</span>
+                        <div class="joystick-center"></div>
+                        <div class="joystick-handle" id="leftHandle"></div>
+                    </div>
+                    <div class="joystick" id="rightStick">
+                        <span class="joystick-label">Pitch/Roll</span>
+                        <div class="joystick-center"></div>
+                        <div class="joystick-handle" id="rightHandle"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-section mission-controls">
+                <div class="panel-title">Mission Waypoints</div>
+                <div class="waypoint-list" id="waypointList">
+                    <div class="waypoint-item">
+                        <span class="wp-num">H</span>
+                        <span class="wp-coords">HOME (0, 0)</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button class="gs-btn" style="flex: 1;" onclick="sim.addWaypoint()">+ Add WP</button>
+                    <button class="gs-btn" style="flex: 1;" onclick="sim.uploadMission()">Upload</button>
+                </div>
+            </div>
+
+            <div class="keyboard-info">
+                <h4>Keyboard Controls</h4>
+                <div class="key-row">
+                    <span class="key">W</span><span>↑ Throttle</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">S</span><span>↓ Throttle</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">A</span><span>← Yaw Left</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">D</span><span>→ Yaw Right</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">↑</span><span>Pitch Fwd</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">↓</span><span>Pitch Back</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">←</span><span>Roll Left</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">→</span><span>Roll Right</span>
+                </div>
+                <div class="key-row" style="margin-top: 8px;">
+                    <span class="key">SPACE</span><span>Arm/Disarm</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">M</span><span>Toggle Mode</span>
+                </div>
+                <div class="key-row">
+                    <span class="key">L</span><span>Land</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ground Station Simulation
+        class GroundStation {
+            constructor() {
+                this.canvas = document.getElementById('simCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.resize();
+                
+                // Drone state
+                this.drone = {
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                    vx: 0,
+                    vy: 0,
+                    vz: 0,
+                    roll: 0,
+                    pitch: 0,
+                    yaw: 0,
+                    armed: false,
+                    battery: 100,
+                    mode: 'STABILIZE'
+                };
+                
+                // Camera/view
+                this.camera = {
+                    x: 0,
+                    y: -200,
+                    zoom: 1,
+                    view: 'map' // map, fpv, split
+                };
+                
+                // Controls
+                this.controls = {
+                    throttle: 0,
+                    yaw: 0,
+                    pitch: 0,
+                    roll: 0
+                };
+                
+                // Waypoints
+                this.waypoints = [];
+                this.currentWaypoint = 0;
+                this.missionRunning = false;
+                
+                // Home position
+                this.home = { x: 0, y: 0 };
+                
+                // Trail
+                this.trail = [];
+                
+                // Keys
+                this.keys = {};
+                
+                // Time
+                this.startTime = Date.now();
+                
+                this.init();
+                this.init3D();
+            }
+            
+            init() {
+                window.addEventListener('resize', () => this.resize());
+                window.addEventListener('keydown', (e) => this.onKeyDown(e));
+                window.addEventListener('keyup', (e) => this.onKeyUp(e));
+                
+                // Joystick controls
+                this.setupJoysticks();
+                
+                // Canvas click for waypoints
+                this.canvas.addEventListener('click', (e) => this.onCanvasClick(e));
+                
+                // Start loop
+                this.loop();
+                
+                this.log('System ready. Press SPACE to arm motors.', 'success');
+            }
+            
+            init3D() {
+                const container = document.getElementById('threeContainer');
+                
+                // Scene
+                this.scene3D = new THREE.Scene();
+                this.scene3D.background = new THREE.Color(0x0d1117);
+                this.scene3D.fog = new THREE.Fog(0x0d1117, 100, 500);
+                
+                // Camera
+                const width = container.clientWidth || 800;
+                const height = container.clientHeight || 600;
+                this.camera3D = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
+                this.camera3D.position.set(0, 100, 150);
+                this.camera3D.lookAt(0, 0, 0);
+                
+                // Renderer
+                this.renderer3D = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer3D.setSize(width, height);
+                this.renderer3D.shadowMap.enabled = true;
+                container.appendChild(this.renderer3D.domElement);
+                
+                // Lights
+                const ambientLight = new THREE.AmbientLight(0x404040, 1);
+                this.scene3D.add(ambientLight);
+                
+                const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+                dirLight.position.set(50, 100, 50);
+                dirLight.castShadow = true;
+                this.scene3D.add(dirLight);
+                
+                // Ground grid
+                const gridHelper = new THREE.GridHelper(1000, 50, 0xf7941d, 0x333333);
+                this.scene3D.add(gridHelper);
+                
+                // Ground plane
+                const planeGeometry = new THREE.PlaneGeometry(1000, 1000);
+                const planeMaterial = new THREE.MeshLambertMaterial({ 
+                    color: 0x1a1a2e,
+                    transparent: true,
+                    opacity: 0.8
+                });
+                const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+                plane.rotation.x = -Math.PI / 2;
+                plane.position.y = -0.1;
+                plane.receiveShadow = true;
+                this.scene3D.add(plane);
+                
+                // Home marker
+                const homeGeometry = new THREE.ConeGeometry(5, 10, 4);
+                const homeMaterial = new THREE.MeshLambertMaterial({ color: 0x27ae60 });
+                this.home3D = new THREE.Mesh(homeGeometry, homeMaterial);
+                this.home3D.position.set(0, 5, 0);
+                this.scene3D.add(this.home3D);
+                
+                // Home ring
+                const ringGeometry = new THREE.RingGeometry(15, 20, 32);
+                const ringMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x27ae60, 
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.5
+                });
+                const homeRing = new THREE.Mesh(ringGeometry, ringMaterial);
+                homeRing.rotation.x = -Math.PI / 2;
+                homeRing.position.y = 0.1;
+                this.scene3D.add(homeRing);
+                
+                // Drone model
+                this.drone3D = this.createDrone3D();
+                this.scene3D.add(this.drone3D);
+                
+                // Waypoints group
+                this.waypoints3D = new THREE.Group();
+                this.scene3D.add(this.waypoints3D);
+                
+                // Trail
+                this.trail3D = [];
+                
+                // Resize handler
+                window.addEventListener('resize', () => this.resize3D());
+            }
+            
+            createDrone3D() {
+                const group = new THREE.Group();
+                
+                // Body
+                const bodyGeo = new THREE.CylinderGeometry(3, 3, 2, 8);
+                const bodyMat = new THREE.MeshLambertMaterial({ color: 0xf7941d });
+                const body = new THREE.Mesh(bodyGeo, bodyMat);
+                body.position.y = 3;
+                group.add(body);
+                
+                // Arms
+                const armGeo = new THREE.BoxGeometry(20, 1, 1);
+                const armMat = new THREE.MeshLambertMaterial({ color: 0x555555 });
+                
+                const arm1 = new THREE.Mesh(armGeo, armMat);
+                arm1.position.y = 3;
+                group.add(arm1);
+                
+                const arm2 = new THREE.Mesh(armGeo, armMat);
+                arm2.position.y = 3;
+                arm2.rotation.y = Math.PI / 2;
+                group.add(arm2);
+                
+                // Motors
+                const motorGeo = new THREE.CylinderGeometry(2, 2, 3, 8);
+                const motorMat = new THREE.MeshLambertMaterial({ color: 0x333333 });
+                
+                const positions = [
+                    [10, 0, 0], [-10, 0, 0],
+                    [0, 0, 10], [0, 0, -10]
+                ];
+                
+                positions.forEach(pos => {
+                    const motor = new THREE.Mesh(motorGeo, motorMat);
+                    motor.position.set(pos[0], 4, pos[2]);
+                    group.add(motor);
+                    
+                    // Propeller
+                    const propGeo = new THREE.BoxGeometry(8, 0.2, 0.5);
+                    const propMat = new THREE.MeshLambertMaterial({ 
+                        color: 0xf7941d,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const prop = new THREE.Mesh(propGeo, propMat);
+                    prop.position.set(pos[0], 6, pos[2]);
+                    group.add(prop);
+                });
+                
+                // Direction indicator (front)
+                const frontGeo = new THREE.ConeGeometry(2, 4, 4);
+                const frontMat = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+                const front = new THREE.Mesh(frontGeo, frontMat);
+                front.position.set(0, 5, -8);
+                front.rotation.x = Math.PI;
+                group.add(front);
+                
+                return group;
+            }
+            
+            resize3D() {
+                const container = document.getElementById('threeContainer');
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                
+                this.camera3D.aspect = width / height;
+                this.camera3D.updateProjectionMatrix();
+                this.renderer3D.setSize(width, height);
+            }
+            
+            update3D() {
+                if (!this.drone3D) return;
+                
+                // Update drone position
+                this.drone3D.position.set(this.drone.x, this.drone.z + 5, this.drone.y);
+                this.drone3D.rotation.set(
+                    this.drone.pitch * Math.PI / 180,
+                    -this.drone.yaw,
+                    -this.drone.roll * Math.PI / 180
+                );
+                
+                // Camera follow
+                const targetPos = new THREE.Vector3(this.drone.x, this.drone.z + 5, this.drone.y);
+                this.camera3D.position.x += (targetPos.x - this.camera3D.position.x) * 0.05;
+                this.camera3D.position.z += ((targetPos.z + 100) - this.camera3D.position.z) * 0.05;
+                this.camera3D.position.y += ((targetPos.y + 60) - this.camera3D.position.y) * 0.05;
+                this.camera3D.lookAt(targetPos);
+                
+                // Update propellers
+                if (this.drone.armed) {
+                    this.drone3D.children.forEach((child, i) => {
+                        if (i > 4) { // Propellers start after body and arms
+                            child.rotation.y += 0.5;
+                        }
+                    });
+                }
+                
+                // Update waypoints
+                this.updateWaypoints3D();
+                
+                // Update trail
+                this.updateTrail3D();
+                
+                // Render
+                this.renderer3D.render(this.scene3D, this.camera3D);
+            }
+            
+            updateWaypoints3D() {
+                // Clear existing waypoints
+                while(this.waypoints3D.children.length > 0) {
+                    this.waypoints3D.remove(this.waypoints3D.children[0]);
+                }
+                
+                // Add home
+                const homeGeo = new THREE.RingGeometry(3, 4, 16);
+                const homeMat = new THREE.MeshBasicMaterial({ 
+                    color: 0x27ae60, 
+                    side: THREE.DoubleSide 
+                });
+                const home = new THREE.Mesh(homeGeo, homeMat);
+                home.rotation.x = -Math.PI / 2;
+                home.position.y = 0.5;
+                this.waypoints3D.add(home);
+                
+                // Add waypoints
+                this.waypoints.forEach((wp, i) => {
+                    const isActive = i === this.currentWaypoint && this.missionRunning;
+                    const color = isActive ? 0xf7941d : 0x3498db;
+                    
+                    const wpGeo = new THREE.SphereGeometry(3, 16, 16);
+                    const wpMat = new THREE.MeshLambertMaterial({ color: color });
+                    const wpMesh = new THREE.Mesh(wpGeo, wpMat);
+                    wpMesh.position.set(wp.x, 10, wp.y);
+                    this.waypoints3D.add(wpMesh);
+                    
+                    // Ring
+                    const ringGeo = new THREE.RingGeometry(5, 6, 16);
+                    const ringMat = new THREE.MeshBasicMaterial({ 
+                        color: color, 
+                        side: THREE.DoubleSide,
+                        transparent: true,
+                        opacity: 0.5
+                    });
+                    const ring = new THREE.Mesh(ringGeo, ringMat);
+                    ring.rotation.x = -Math.PI / 2;
+                    ring.position.set(wp.x, 10, wp.y);
+                    this.waypoints3D.add(ring);
+                    
+                    // Label
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 64;
+                    canvas.height = 64;
+                    const ctx = canvas.getContext('2d');
+                    ctx.fillStyle = isActive ? '#f7941d' : '#3498db';
+                    ctx.beginPath();
+                    ctx.arc(32, 32, 30, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 32px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText((i + 1).toString(), 32, 32);
+                    
+                    const texture = new THREE.CanvasTexture(canvas);
+                    const spriteMat = new THREE.SpriteMaterial({ map: texture });
+                    const sprite = new THREE.Sprite(spriteMat);
+                    sprite.position.set(wp.x, 18, wp.y);
+                    sprite.scale.set(10, 10, 1);
+                    this.waypoints3D.add(sprite);
+                });
+                
+                // Draw path line
+                if (this.waypoints.length > 0) {
+                    const points = [new THREE.Vector3(0, 10, 0)];
+                    this.waypoints.forEach(wp => {
+                        points.push(new THREE.Vector3(wp.x, 10, wp.y));
+                    });
+                    
+                    const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+                    const lineMat = new THREE.LineDashedMaterial({
+                        color: 0xf7941d,
+                        dashSize: 10,
+                        gapSize: 5,
+                        opacity: 0.5,
+                        transparent: true
+                    });
+                    const line = new THREE.Line(lineGeo, lineMat);
+                    line.computeLineDistances();
+                    this.waypoints3D.add(line);
+                }
+            }
+            
+            updateTrail3D() {
+                // Add new trail point
+                if (this.drone.z > 0.5 && Math.random() > 0.8) {
+                    const trailGeo = new THREE.SphereGeometry(1, 8, 8);
+                    const trailMat = new THREE.MeshLambertMaterial({ 
+                        color: 0xf7941d,
+                        transparent: true,
+                        opacity: 0.6
+                    });
+                    const trailPoint = new THREE.Mesh(trailGeo, trailMat);
+                    trailPoint.position.set(this.drone.x, this.drone.z + 3, this.drone.y);
+                    this.scene3D.add(trailPoint);
+                    this.trail3D.push({ mesh: trailPoint, time: Date.now() });
+                }
+                
+                // Remove old trail points
+                const now = Date.now();
+                this.trail3D = this.trail3D.filter(t => {
+                    if (now - t.time > 10000) {
+                        this.scene3D.remove(t.mesh);
+                        return false;
+                    }
+                    t.mesh.material.opacity = 0.6 * (1 - (now - t.time) / 10000);
+                    return true;
+                });
+            }
+            
+            resize() {
+                this.canvas.width = this.canvas.parentElement.clientWidth;
+                this.canvas.height = this.canvas.parentElement.clientHeight;
+            }
+            
+            setupJoysticks() {
+                const leftStick = document.getElementById('leftStick');
+                const rightStick = document.getElementById('rightStick');
+                const leftHandle = document.getElementById('leftHandle');
+                const rightHandle = document.getElementById('rightHandle');
+                
+                this.setupJoystick(leftStick, leftHandle, (x, y) => {
+                    this.controls.yaw = x * 100;
+                    this.controls.throttle = -y * 100;
+                });
+                
+                this.setupJoystick(rightStick, rightHandle, (x, y) => {
+                    this.controls.roll = x * 100;
+                    this.controls.pitch = -y * 100;
+                });
+            }
+            
+            setupJoystick(element, handle, callback) {
+                let dragging = false;
+                const rect = element.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const maxDist = rect.width / 2 - 20;
+                
+                const update = (clientX, clientY) => {
+                    const rect = element.getBoundingClientRect();
+                    const x = clientX - rect.left - centerX;
+                    const y = clientY - rect.top - centerY;
+                    const dist = Math.sqrt(x * x + y * y);
+                    const clamped = Math.min(dist, maxDist);
+                    const angle = Math.atan2(y, x);
+                    
+                    const finalX = Math.cos(angle) * clamped;
+                    const finalY = Math.sin(angle) * clamped;
+                    
+                    handle.style.transform = `translate(calc(-50% + ${finalX}px), calc(-50% + ${finalY}px))`;
+                    
+                    callback(finalX / maxDist, finalY / maxDist);
+                };
+                
+                const reset = () => {
+                    dragging = false;
+                    handle.style.transform = 'translate(-50%, -50%)';
+                    callback(0, 0);
+                };
+                
+                element.addEventListener('mousedown', (e) => {
+                    dragging = true;
+                    update(e.clientX, e.clientY);
+                });
+                
+                window.addEventListener('mousemove', (e) => {
+                    if (dragging) update(e.clientX, e.clientY);
+                });
+                
+                window.addEventListener('mouseup', reset);
+                
+                // Touch support
+                element.addEventListener('touchstart', (e) => {
+                    dragging = true;
+                    update(e.touches[0].clientX, e.touches[0].clientY);
+                    e.preventDefault();
+                });
+                
+                element.addEventListener('touchmove', (e) => {
+                    if (dragging) {
+                        update(e.touches[0].clientX, e.touches[0].clientY);
+                        e.preventDefault();
+                    }
+                });
+                
+                element.addEventListener('touchend', reset);
+            }
+            
+            onKeyDown(e) {
+                this.keys[e.code] = true;
+                
+                switch(e.code) {
+                    case 'Space':
+                        e.preventDefault();
+                        this.armDisarm();
+                        break;
+                    case 'KeyM':
+                        this.toggleMode();
+                        break;
+                    case 'KeyL':
+                        this.land();
+                        break;
+                }
+            }
+            
+            onKeyUp(e) {
+                this.keys[e.code] = false;
+            }
+            
+            processKeyboard() {
+                // Throttle
+                if (this.keys['KeyW']) this.controls.throttle = Math.min(100, this.controls.throttle + 2);
+                else if (this.keys['KeyS']) this.controls.throttle = Math.max(-100, this.controls.throttle - 2);
+                else this.controls.throttle *= 0.95;
+                
+                // Yaw
+                if (this.keys['KeyA']) this.controls.yaw = Math.max(-100, this.controls.yaw - 3);
+                else if (this.keys['KeyD']) this.controls.yaw = Math.min(100, this.controls.yaw + 3);
+                else this.controls.yaw *= 0.9;
+                
+                // Pitch
+                if (this.keys['ArrowUp']) this.controls.pitch = Math.min(100, this.controls.pitch + 3);
+                else if (this.keys['ArrowDown']) this.controls.pitch = Math.max(-100, this.controls.pitch - 3);
+                else this.controls.pitch *= 0.9;
+                
+                // Roll
+                if (this.keys['ArrowLeft']) this.controls.roll = Math.max(-100, this.controls.roll - 3);
+                else if (this.keys['ArrowRight']) this.controls.roll = Math.min(100, this.controls.roll + 3);
+                else this.controls.roll *= 0.9;
+            }
+            
+            armDisarm() {
+                if (this.drone.armed) {
+                    this.drone.armed = false;
+                    document.getElementById('armBtn').textContent = 'ARM';
+                    document.getElementById('armBtn').classList.remove('danger');
+                    document.getElementById('armBtn').classList.add('primary');
+                    this.log('Motors disarmed', 'warn');
+                } else {
+                    if (this.drone.battery <= 0) {
+                        this.log('Cannot arm: Battery depleted', 'error');
+                        return;
+                    }
+                    this.drone.armed = true;
+                    document.getElementById('armBtn').textContent = 'DISARM';
+                    document.getElementById('armBtn').classList.remove('primary');
+                    document.getElementById('armBtn').classList.add('danger');
+                    this.log('Motors armed - Ready for takeoff', 'success');
+                }
+            }
+            
+            toggleMode() {
+                const modes = ['STABILIZE', 'ALT_HOLD', 'LOITER', 'AUTO', 'RTL'];
+                const current = modes.indexOf(this.drone.mode);
+                this.drone.mode = modes[(current + 1) % modes.length];
+                document.getElementById('flightMode').textContent = this.drone.mode;
+                document.getElementById('osdMode').textContent = this.drone.mode.substring(0, 4);
+                this.log(`Flight mode changed to ${this.drone.mode}`, 'info');
+            }
+            
+            land() {
+                this.log('Initiating landing sequence...', 'info');
+                this.drone.mode = 'LAND';
+                document.getElementById('flightMode').textContent = 'LAND';
+                setTimeout(() => {
+                    if (this.drone.z <= 0.5) {
+                        this.drone.armed = false;
+                        this.drone.z = 0;
+                        this.log('Landing complete', 'success');
+                    }
+                }, 3000);
+            }
+            
+            emergencyStop() {
+                this.drone.armed = false;
+                this.drone.vx = 0;
+                this.drone.vy = 0;
+                this.drone.vz = 0;
+                this.controls = { throttle: 0, yaw: 0, pitch: 0, roll: 0 };
+                this.log('EMERGENCY STOP ACTIVATED', 'error');
+            }
+            
+            onCanvasClick(e) {
+                if (this.missionRunning) return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Convert to world coordinates
+                const worldX = (x - this.canvas.width / 2) / this.camera.zoom + this.camera.x;
+                const worldY = (y - this.canvas.height / 2) / this.camera.zoom + this.camera.y;
+                
+                this.addWaypointAt(worldX, worldY);
+            }
+            
+            addWaypointAt(x, y) {
+                this.waypoints.push({ x, y, z: 10 });
+                this.updateWaypointList();
+                this.log(`Waypoint ${this.waypoints.length} added at (${x.toFixed(1)}, ${y.toFixed(1)})`, 'info');
+            }
+            
+            addWaypoint() {
+                // Add waypoint 50m ahead of drone
+                const angle = this.drone.yaw;
+                const dist = 50;
+                const x = this.drone.x + Math.sin(angle) * dist;
+                const y = this.drone.y + Math.cos(angle) * dist;
+                this.addWaypointAt(x, y);
+            }
+            
+            clearWaypoints() {
+                this.waypoints = [];
+                this.currentWaypoint = 0;
+                this.missionRunning = false;
+                this.updateWaypointList();
+                this.log('All waypoints cleared', 'warn');
+            }
+            
+            updateWaypointList() {
+                const list = document.getElementById('waypointList');
+                list.innerHTML = `
+                    <div class="waypoint-item">
+                        <span class="wp-num">H</span>
+                        <span class="wp-coords">HOME (0, 0)</span>
+                    </div>
+                `;
+                
+                this.waypoints.forEach((wp, i) => {
+                    list.innerHTML += `
+                        <div class="waypoint-item">
+                            <span class="wp-num">${i + 1}</span>
+                            <span class="wp-coords">${wp.x.toFixed(1)}, ${wp.y.toFixed(1)}</span>
+                            <div class="wp-actions">
+                                <button class="wp-btn" onclick="sim.removeWaypoint(${i})">×</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            removeWaypoint(index) {
+                this.waypoints.splice(index, 1);
+                this.updateWaypointList();
+            }
+            
+            uploadMission() {
+                if (this.waypoints.length === 0) {
+                    this.log('No waypoints to upload', 'warn');
+                    return;
+                }
+                this.log(`Mission uploaded: ${this.waypoints.length} waypoints`, 'success');
+            }
+            
+            toggleMission() {
+                if (this.waypoints.length === 0) {
+                    this.log('No mission loaded', 'warn');
+                    return;
+                }
+                
+                this.missionRunning = !this.missionRunning;
+                if (this.missionRunning) {
+                    this.drone.mode = 'AUTO';
+                    this.currentWaypoint = 0;
+                    this.log('Mission started', 'success');
+                } else {
+                    this.drone.mode = 'STABILIZE';
+                    this.log('Mission paused', 'warn');
+                }
+            }
+            
+            setView(view) {
+                this.camera.view = view;
+                document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+                event.target.classList.add('active');
+                
+                // Toggle visibility
+                const canvas = document.getElementById('simCanvas');
+                const container3D = document.getElementById('threeContainer');
+                const containerMap = document.getElementById('mapContainer');
+                
+                // Hide all first
+                canvas.style.display = 'none';
+                container3D.style.display = 'none';
+                containerMap.style.display = 'none';
+                
+                if (view === '3d') {
+                    container3D.style.display = 'block';
+                    this.resize3D();
+                    this.log('Switched to 3D view', 'info');
+                } else if (view === 'map') {
+                    containerMap.style.display = 'block';
+                    if (!this.map) {
+                        this.initMap();
+                    }
+                    this.log('Switched to Map view', 'info');
+                } else {
+                    canvas.style.display = 'block';
+                    this.log(`Switched to ${view} view`, 'info');
+                }
+            }
+            
+            initMap() {
+                // Home coordinates (Bangalore as default)
+                this.homeCoords = [77.5946, 12.9716];
+                this.userCoords = null; // Will store user's actual GPS location
+                
+                // Create OpenLayers map
+                this.map = new ol.Map({
+                    target: 'mapContainer',
+                    layers: [
+                        new ol.layer.Tile({
+                            source: new ol.source.OSM({
+                                url: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                            })
+                        })
+                    ],
+                    view: new ol.View({
+                        center: ol.proj.fromLonLat(this.homeCoords),
+                        zoom: 17
+                    })
+                });
+                
+                // Drone marker style - quadcopter icon with direction
+                this.droneStyle = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+                                <!-- Drone body -->
+                                <circle cx="24" cy="24" r="20" fill="%23f7941d" stroke="%23fff" stroke-width="3"/>
+                                <!-- Arms -->
+                                <line x1="8" y1="8" x2="18" y2="18" stroke="%23fff" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="40" y1="8" x2="30" y2="18" stroke="%23fff" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="8" y1="40" x2="18" y2="30" stroke="%23fff" stroke-width="3" stroke-linecap="round"/>
+                                <line x1="40" y1="40" x2="30" y2="30" stroke="%23fff" stroke-width="3" stroke-linecap="round"/>
+                                <!-- Motors -->
+                                <circle cx="8" cy="8" r="5" fill="%23333" stroke="%23fff" stroke-width="2"/>
+                                <circle cx="40" cy="8" r="5" fill="%23333" stroke="%23fff" stroke-width="2"/>
+                                <circle cx="8" cy="40" r="5" fill="%23333" stroke="%23fff" stroke-width="2"/>
+                                <circle cx="40" cy="40" r="5" fill="%23333" stroke="%23fff" stroke-width="2"/>
+                                <!-- Direction arrow (front) -->
+                                <path d="M24 6 L20 16 L24 14 L28 16 Z" fill="%23ff0000"/>
+                                <!-- Center dot -->
+                                <circle cx="24" cy="24" r="5" fill="%23fff"/>
+                            </svg>
+                        `),
+                        scale: 1,
+                        rotation: 0
+                    })
+                });
+                
+                // User location marker style - pulsing blue dot
+                this.userStyle = new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40">
+                                <!-- Outer ring -->
+                                <circle cx="20" cy="20" r="18" fill="none" stroke="%233498db" stroke-width="2" opacity="0.5"/>
+                                <!-- Inner dot -->
+                                <circle cx="20" cy="20" r="12" fill="%233498db" stroke="%23fff" stroke-width="3"/>
+                                <!-- Center -->
+                                <circle cx="20" cy="20" r="6" fill="%23fff"/>
+                            </svg>
+                        `),
+                        scale: 1
+                    })
+                });
+                
+                // Home marker
+                const homeFeature = new ol.Feature({
+                    geometry: new ol.geom.Point(ol.proj.fromLonLat(this.homeCoords)),
+                    name: 'home'
+                });
+                homeFeature.setStyle(new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
+                                <circle cx="18" cy="18" r="15" fill="%2327ae60" stroke="%23fff" stroke-width="3"/>
+                                <text x="18" y="24" text-anchor="middle" fill="%23fff" font-size="16" font-weight="bold">H</text>
+                            </svg>
+                        `),
+                        scale: 1
+                    })
+                }));
+                
+                // Drone marker
+                this.droneFeature = new ol.Feature({
+                    geometry: new ol.geom.Point(ol.proj.fromLonLat(this.homeCoords)),
+                    name: 'drone'
+                });
+                this.droneFeature.setStyle(this.droneStyle);
+                
+                // User location marker (initially hidden)
+                this.userFeature = new ol.Feature({
+                    geometry: new ol.geom.Point(ol.proj.fromLonLat(this.homeCoords)),
+                    name: 'user'
+                });
+                this.userFeature.setStyle(this.userStyle);
+                this.userFeature.set('visible', false);
+                
+                // Vector layer for markers
+                this.markerLayer = new ol.layer.Vector({
+                    source: new ol.source.Vector({
+                        features: [homeFeature, this.droneFeature, this.userFeature]
+                    })
+                });
+                this.map.addLayer(this.markerLayer);
+                
+                // Get user location
+                this.getUserLocation();
+            }
+            
+            getUserLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lon = position.coords.longitude;
+                            const lat = position.coords.latitude;
+                            this.userCoords = [lon, lat];
+                            
+                            // Update user marker position
+                            this.userFeature.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.userCoords)));
+                            this.userFeature.set('visible', true);
+                            
+                            // Update home to user location
+                            this.homeCoords = [lon, lat];
+                            
+                            // Update home marker
+                            const features = this.markerLayer.getSource().getFeatures();
+                            const homeFeature = features.find(f => f.get('name') === 'home');
+                            if (homeFeature) {
+                                homeFeature.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.homeCoords)));
+                            }
+                            
+                            // Center map on user location
+                            this.map.getView().setCenter(ol.proj.fromLonLat(this.userCoords));
+                            
+                            this.log(`GPS location acquired: ${lat.toFixed(5)}, ${lon.toFixed(5)}`, 'success');
+                            
+                            // Watch for position updates
+                            navigator.geolocation.watchPosition(
+                                (pos) => {
+                                    this.userCoords = [pos.coords.longitude, pos.coords.latitude];
+                                    this.userFeature.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.userCoords)));
+                                },
+                                (err) => console.log('GPS watch error:', err),
+                                { enableHighAccuracy: true }
+                            );
+                        },
+                        (error) => {
+                            console.log('GPS error:', error);
+                            this.log('Could not get GPS location. Using default location.', 'warn');
+                        },
+                        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                    );
+                } else {
+                    this.log('Geolocation not supported by browser', 'warn');
+                }
+                
+                // Waypoints layer
+                this.waypointSource = new ol.source.Vector();
+                this.waypointLayer = new ol.layer.Vector({
+                    source: this.waypointSource,
+                    style: (feature) => {
+                        const num = feature.get('num');
+                        const isActive = feature.get('active');
+                        return new ol.style.Style({
+                            image: new ol.style.Icon({
+                                src: 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36">
+                                        <circle cx="18" cy="18" r="14" fill="${isActive ? '%23f7941d' : '%233498db'}" stroke="%23fff" stroke-width="2"/>
+                                        <text x="18" y="24" text-anchor="middle" fill="%23fff" font-size="14" font-weight="bold">${num}</text>
+                                    </svg>
+                                `),
+                                scale: 1
+                            })
+                        });
+                    }
+                });
+                this.map.addLayer(this.waypointLayer);
+                
+                // Trail layer
+                this.trailSource = new ol.source.Vector();
+                this.trailLayer = new ol.layer.Vector({
+                    source: this.trailSource,
+                    style: new ol.style.Style({
+                        image: new ol.style.Circle({
+                            radius: 3,
+                            fill: new ol.style.Fill({ color: 'rgba(247, 148, 29, 0.5)' })
+                        })
+                    })
+                });
+                this.map.addLayer(this.trailLayer);
+                
+                // Mission path layer
+                this.pathSource = new ol.source.Vector();
+                this.pathLayer = new ol.layer.Vector({
+                    source: this.pathSource,
+                    style: new ol.style.Style({
+                        stroke: new ol.style.Stroke({
+                            color: 'rgba(247, 148, 29, 0.7)',
+                            width: 3,
+                            lineDash: [10, 5]
+                        })
+                    })
+                });
+                this.map.addLayer(this.pathLayer);
+                
+                // Click to add waypoint (only on map layer, not controls)
+                this.map.on('click', (e) => {
+                    if (this.missionRunning) return;
+                    // Check if click is on control panel
+                    const target = e.originalEvent.target;
+                    if (target.closest('.view-controls') || target.closest('.telemetry-panel') || target.closest('.controls-panel')) {
+                        return;
+                    }
+                    const coords = ol.proj.toLonLat(e.coordinate);
+                    this.addWaypointAtMap(coords[0], coords[1]);
+                });
+                
+                // Also add user location marker
+                if ('geolocation' in navigator) {
+                    navigator.geolocation.getCurrentPosition((position) => {
+                        const userCoords = [position.coords.longitude, position.coords.latitude];
+                        this.addUserLocationMarker(userCoords);
+                        // Update home to user location
+                        this.homeCoords = userCoords;
+                        this.map.getView().setCenter(ol.proj.fromLonLat(userCoords));
+                        this.log(`User location detected: ${userCoords[1].toFixed(4)}, ${userCoords[0].toFixed(4)}`, 'success');
+                    }, () => {
+                        this.log('Using default location (Bangalore)', 'info');
+                    });
+                }
+                
+                // Start map update loop
+                this.updateMapLoop();
+                
+                this.log('Real Earth map loaded (OpenStreetMap)', 'success');
+            }
+            
+            addUserLocationMarker(coords) {
+                const userFeature = new ol.Feature({
+                    geometry: new ol.geom.Point(ol.proj.fromLonLat(coords))
+                });
+                userFeature.setStyle(new ol.style.Style({
+                    image: new ol.style.Icon({
+                        src: 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30">
+                                <circle cx="15" cy="15" r="10" fill="%233498db" stroke="%23fff" stroke-width="2" opacity="0.8"/>
+                                <circle cx="15" cy="15" r="5" fill="%23fff"/>
+                                <circle cx="15" cy="15" r="2" fill="%233498db"/>
+                            </svg>
+                        `),
+                        scale: 1
+                    })
+                }));
+                
+                // Add to a user layer or existing marker layer
+                if (this.userLayer) {
+                    this.userLayer.getSource().addFeature(userFeature);
+                } else {
+                    this.userLayer = new ol.layer.Vector({
+                        source: new ol.source.Vector({ features: [userFeature] })
+                    });
+                    this.map.addLayer(this.userLayer);
+                }
+                
+                // Update home marker to user location
+                if (this.markerLayer) {
+                    const features = this.markerLayer.getSource().getFeatures();
+                    features.forEach(f => {
+                        if (f.getGeometry && f.getGeometry().getCoordinates) {
+                            // This is the home marker, update it
+                        }
+                    });
+                }
+            }
+            
+            addWaypointAtMap(lon, lat) {
+                // Convert to local coordinates (approximate)
+                const x = (lon - this.homeCoords[0]) * 111320 * Math.cos(this.homeCoords[1] * Math.PI / 180);
+                const y = (lat - this.homeCoords[1]) * 111320;
+                this.addWaypointAt(x, y);
+                this.updateMapWaypoints();
+            }
+            
+            updateMapWaypoints() {
+                if (!this.waypointSource) return;
+                
+                this.waypointSource.clear();
+                
+                // Add waypoints
+                this.waypoints.forEach((wp, i) => {
+                    const lon = this.homeCoords[0] + wp.x / (111320 * Math.cos(this.homeCoords[1] * Math.PI / 180));
+                    const lat = this.homeCoords[1] + wp.y / 111320;
+                    
+                    const feature = new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat])),
+                        num: i + 1,
+                        active: i === this.currentWaypoint && this.missionRunning
+                    });
+                    this.waypointSource.addFeature(feature);
+                });
+                
+                // Update path line
+                this.pathSource.clear();
+                if (this.waypoints.length > 0) {
+                    const coords = [ol.proj.fromLonLat(this.homeCoords)];
+                    this.waypoints.forEach(wp => {
+                        const lon = this.homeCoords[0] + wp.x / (111320 * Math.cos(this.homeCoords[1] * Math.PI / 180));
+                        const lat = this.homeCoords[1] + wp.y / 111320;
+                        coords.push(ol.proj.fromLonLat([lon, lat]));
+                    });
+                    
+                    const lineFeature = new ol.Feature({
+                        geometry: new ol.geom.LineString(coords)
+                    });
+                    this.pathSource.addFeature(lineFeature);
+                }
+            }
+            
+            updateMapLoop() {
+                if (!this.map || this.camera.view !== 'map') {
+                    requestAnimationFrame(() => this.updateMapLoop());
+                    return;
+                }
+                
+                // Update drone position on map
+                if (this.droneFeature) {
+                    const lon = this.homeCoords[0] + this.drone.x / (111320 * Math.cos(this.homeCoords[1] * Math.PI / 180));
+                    const lat = this.homeCoords[1] + this.drone.y / 111320;
+                    this.droneFeature.setGeometry(new ol.geom.Point(ol.proj.fromLonLat([lon, lat])));
+                    
+                    // Update rotation
+                    this.droneStyle.getImage().setRotation(-this.drone.yaw);
+                }
+                
+                // Update trail
+                if (this.drone.z > 0.5 && Math.random() > 0.9) {
+                    const lon = this.homeCoords[0] + this.drone.x / (111320 * Math.cos(this.homeCoords[1] * Math.PI / 180));
+                    const lat = this.homeCoords[1] + this.drone.y / 111320;
+                    const trailFeature = new ol.Feature({
+                        geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+                    });
+                    trailFeature.set('time', Date.now());
+                    this.trailSource.addFeature(trailFeature);
+                }
+                
+                // Remove old trail points
+                const now = Date.now();
+                const oldFeatures = this.trailSource.getFeatures().filter(f => {
+                    const time = f.get('time');
+                    return time && (now - time > 30000);
+                });
+                oldFeatures.forEach(f => this.trailSource.removeFeature(f));
+                
+                // Center map on drone
+                const view = this.map.getView();
+                const lon = this.homeCoords[0] + this.drone.x / (111320 * Math.cos(this.homeCoords[1] * Math.PI / 180));
+                const lat = this.homeCoords[1] + this.drone.y / 111320;
+                view.setCenter(ol.proj.fromLonLat([lon, lat]));
+                
+                // Update waypoints
+                this.updateMapWaypoints();
+                
+                requestAnimationFrame(() => this.updateMapLoop());
+            }
+            
+            updatePhysics() {
+                if (!this.drone.armed && this.drone.z <= 0.1) {
+                    this.drone.vx *= 0.9;
+                    this.drone.vy *= 0.9;
+                    this.drone.vz = 0;
+                    return;
+                }
+                
+                // Mission control
+                if (this.missionRunning && this.waypoints.length > 0) {
+                    const target = this.waypoints[this.currentWaypoint];
+                    const dx = target.x - this.drone.x;
+                    const dy = target.y - this.drone.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (dist < 5) {
+                        this.currentWaypoint++;
+                        if (this.currentWaypoint >= this.waypoints.length) {
+                            this.missionRunning = false;
+                            this.log('Mission complete', 'success');
+                        } else {
+                            this.log(`Proceeding to waypoint ${this.currentWaypoint + 1}`, 'info');
+                        }
+                    } else {
+                        const angle = Math.atan2(dx, dy);
+                        this.controls.pitch = Math.min(30, dist * 0.5);
+                        this.drone.yaw = angle;
+                    }
+                }
+                
+                // Physics
+                const maxSpeed = 15;
+                const accel = 0.5;
+                
+                // Throttle -> vertical velocity
+                const targetVz = this.controls.throttle / 100 * 5;
+                this.drone.vz += (targetVz - this.drone.vz) * 0.1;
+                this.drone.z = Math.max(0, this.drone.z + this.drone.vz * 0.1);
+                
+                // Pitch -> forward/backward
+                this.drone.pitch = this.controls.pitch / 100 * 30;
+                this.drone.vx += Math.sin(this.drone.yaw) * this.drone.pitch / 30 * accel;
+                this.drone.vy += Math.cos(this.drone.yaw) * this.drone.pitch / 30 * accel;
+                
+                // Roll -> left/right
+                this.drone.roll = -this.controls.roll / 100 * 30;
+                this.drone.vx += Math.cos(this.drone.yaw) * this.drone.roll / 30 * accel;
+                this.drone.vy -= Math.sin(this.drone.yaw) * this.drone.roll / 30 * accel;
+                
+                // Yaw
+                this.drone.yaw += this.controls.yaw / 100 * 0.05;
+                
+                // Apply drag
+                this.drone.vx *= 0.98;
+                this.drone.vy *= 0.98;
+                
+                // Limit speed
+                const speed = Math.sqrt(this.drone.vx ** 2 + this.drone.vy ** 2);
+                if (speed > maxSpeed) {
+                    this.drone.vx = (this.drone.vx / speed) * maxSpeed;
+                    this.drone.vy = (this.drone.vy / speed) * maxSpeed;
+                }
+                
+                // Update position
+                this.drone.x += this.drone.vx;
+                this.drone.y += this.drone.vy;
+                
+                // Ground collision
+                if (this.drone.z <= 0) {
+                    this.drone.z = 0;
+                    this.drone.vz = 0;
+                    this.drone.vx *= 0.8;
+                    this.drone.vy *= 0.8;
+                }
+                
+                // Battery drain
+                if (this.drone.armed) {
+                    this.drone.battery -= 0.02;
+                    if (this.drone.battery <= 0) {
+                        this.drone.battery = 0;
+                        this.drone.armed = false;
+                        this.log('Battery depleted - Emergency landing', 'error');
+                    }
+                }
+                
+                // Trail
+                if (this.drone.z > 0.5 && Math.random() > 0.8) {
+                    this.trail.push({ x: this.drone.x, y: this.drone.y, z: this.drone.z, time: Date.now() });
+                }
+                this.trail = this.trail.filter(p => Date.now() - p.time < 10000);
+                
+                // Camera follow
+                if (this.camera.view === 'map') {
+                    this.camera.x += (this.drone.x - this.camera.x) * 0.05;
+                    this.camera.y += (this.drone.y - this.camera.y) * 0.05;
+                }
+            }
+            
+            render() {
+                const ctx = this.ctx;
+                const w = this.canvas.width;
+                const h = this.canvas.height;
+                
+                // Clear
+                ctx.fillStyle = '#0d1117';
+                ctx.fillRect(0, 0, w, h);
+                
+                // Save context for transforms
+                ctx.save();
+                
+                if (this.camera.view === 'map') {
+                    // Map view
+                    ctx.translate(w / 2, h / 2);
+                    ctx.scale(this.camera.zoom, this.camera.zoom);
+                    ctx.translate(-this.camera.x, -this.camera.y);
+                    
+                    // Draw grid
+                    this.drawGrid(ctx);
+                    
+                    // Draw home
+                    this.drawHome(ctx);
+                    
+                    // Draw waypoints
+                    this.drawWaypoints(ctx);
+                    
+                    // Draw trail
+                    this.drawTrail(ctx);
+                    
+                    // Draw drone
+                    this.drawDroneTop(ctx);
+                } else if (this.camera.view === 'fpv') {
+                    // FPV view
+                    this.drawFPV(ctx, w, h);
+                } else {
+                    // Split view
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(0, 0, w / 2, h);
+                    ctx.clip();
+                    ctx.translate(w / 4, h / 2);
+                    ctx.scale(this.camera.zoom, this.camera.zoom);
+                    ctx.translate(-this.camera.x, -this.camera.y);
+                    this.drawGrid(ctx);
+                    this.drawHome(ctx);
+                    this.drawWaypoints(ctx);
+                    this.drawTrail(ctx);
+                    this.drawDroneTop(ctx);
+                    ctx.restore();
+                    
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(w / 2, 0, w / 2, h);
+                    ctx.clip();
+                    this.drawFPV(ctx, w / 2, h, w / 2);
+                    ctx.restore();
+                    
+                    // Divider
+                    ctx.strokeStyle = '#f7941d';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(w / 2, 0);
+                    ctx.lineTo(w / 2, h);
+                    ctx.stroke();
+                }
+                
+                ctx.restore();
+            }
+            
+            drawGrid(ctx) {
+                const size = 1000;
+                const step = 50;
+                
+                ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+                ctx.lineWidth = 1;
+                
+                for (let x = -size; x <= size; x += step) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, -size);
+                    ctx.lineTo(x, size);
+                    ctx.stroke();
+                }
+                
+                for (let y = -size; y <= size; y += step) {
+                    ctx.beginPath();
+                    ctx.moveTo(-size, y);
+                    ctx.lineTo(size, y);
+                    ctx.stroke();
+                }
+                
+                // Major grid lines
+                ctx.strokeStyle = 'rgba(247,148,29,0.1)';
+                ctx.lineWidth = 1;
+                
+                for (let x = -size; x <= size; x += 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, -size);
+                    ctx.lineTo(x, size);
+                    ctx.stroke();
+                }
+                
+                for (let y = -size; y <= size; y += 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(-size, y);
+                    ctx.lineTo(size, y);
+                    ctx.stroke();
+                }
+            }
+            
+            drawHome(ctx) {
+                ctx.fillStyle = '#27ae60';
+                ctx.beginPath();
+                ctx.arc(0, 0, 8, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.strokeStyle = '#27ae60';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(0, 0, 15, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#27ae60';
+                ctx.font = 'bold 12px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('H', 0, 4);
+            }
+            
+            drawWaypoints(ctx) {
+                this.waypoints.forEach((wp, i) => {
+                    ctx.fillStyle = i === this.currentWaypoint && this.missionRunning ? '#f7941d' : '#3498db';
+                    ctx.beginPath();
+                    ctx.arc(wp.x, wp.y, 6, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    ctx.strokeStyle = i === this.currentWaypoint && this.missionRunning ? '#f7941d' : '#3498db';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(wp.x, wp.y, 12, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 12px Inter';
+                    ctx.textAlign = 'center';
+                    ctx.fillText((i + 1).toString(), wp.x, wp.y + 4);
+                });
+                
+                // Draw mission path
+                if (this.waypoints.length > 0) {
+                    ctx.strokeStyle = 'rgba(247,148,29,0.3)';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([10, 5]);
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    this.waypoints.forEach(wp => ctx.lineTo(wp.x, wp.y));
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+            }
+            
+            drawTrail(ctx) {
+                this.trail.forEach((p, i) => {
+                    const alpha = 1 - (Date.now() - p.time) / 10000;
+                    ctx.fillStyle = `rgba(247,148,29,${alpha * 0.5})`;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+            }
+            
+            drawDroneTop(ctx) {
+                const { x, y, yaw, roll, pitch, armed } = this.drone;
+                
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(yaw);
+                
+                // Arms
+                ctx.strokeStyle = armed ? '#f7941d' : '#7a7a9d';
+                ctx.lineWidth = 3;
+                
+                // Front arms
+                ctx.beginPath();
+                ctx.moveTo(-20, -20);
+                ctx.lineTo(20, -20);
+                ctx.stroke();
+                
+                // Back arms
+                ctx.beginPath();
+                ctx.moveTo(-20, 20);
+                ctx.lineTo(20, 20);
+                ctx.stroke();
+                
+                // Motors
+                const motorColor = armed ? '#f7941d' : '#444';
+                
+                [-20, 20].forEach(mx => {
+                    [-20, 20].forEach(my => {
+                        ctx.fillStyle = motorColor;
+                        ctx.beginPath();
+                        ctx.arc(mx, my, 8, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        if (armed) {
+                            ctx.strokeStyle = 'rgba(247,148,29,0.5)';
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.arc(mx, my, 12 + Math.random() * 3, 0, Math.PI * 2);
+                            ctx.stroke();
+                        }
+                    });
+                });
+                
+                // Body
+                ctx.fillStyle = '#242444';
+                ctx.beginPath();
+                ctx.arc(0, 0, 12, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.strokeStyle = '#f7941d';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(0, 0, 12, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Direction indicator
+                ctx.fillStyle = '#f7941d';
+                ctx.beginPath();
+                ctx.moveTo(0, -20);
+                ctx.lineTo(-5, -8);
+                ctx.lineTo(5, -8);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.restore();
+            }
+            
+            drawFPV(ctx, w, h, offsetX = 0) {
+                // Sky gradient
+                const gradient = ctx.createLinearGradient(0, 0, 0, h);
+                gradient.addColorStop(0, '#1a1a3e');
+                gradient.addColorStop(0.5, '#2d2d5a');
+                gradient.addColorStop(0.5, '#1a3a1a');
+                gradient.addColorStop(1, '#0d280d');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(offsetX, 0, w, h);
+                
+                // Horizon line
+                const horizonY = h / 2 + this.drone.pitch * 3;
+                const rollAngle = this.drone.roll * Math.PI / 180;
+                
+                ctx.save();
+                ctx.translate(w / 2 + offsetX, horizonY);
+                ctx.rotate(rollAngle);
+                
+                // Horizon
+                ctx.strokeStyle = '#f7941d';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(-w, 0);
+                ctx.lineTo(w, 0);
+                ctx.stroke();
+                
+                // Pitch ladder
+                ctx.strokeStyle = 'rgba(247,148,29,0.5)';
+                ctx.lineWidth = 1;
+                for (let i = -60; i <= 60; i += 10) {
+                    if (i === 0) continue;
+                    const y = -i * 5;
+                    ctx.beginPath();
+                    ctx.moveTo(-40, y);
+                    ctx.lineTo(40, y);
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = '#f7941d';
+                    ctx.font = '12px JetBrains Mono';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(i.toString(), 45, y + 4);
+                    ctx.textAlign = 'right';
+                    ctx.fillText(i.toString(), -45, y + 4);
+                }
+                
+                ctx.restore();
+                
+                // Center crosshair
+                ctx.strokeStyle = '#f7941d';
+                ctx.lineWidth = 2;
+                const cx = w / 2 + offsetX;
+                const cy = h / 2;
+                
+                ctx.beginPath();
+                ctx.moveTo(cx - 20, cy);
+                ctx.lineTo(cx - 5, cy);
+                ctx.moveTo(cx + 5, cy);
+                ctx.lineTo(cx + 20, cy);
+                ctx.moveTo(cx, cy - 20);
+                ctx.lineTo(cx, cy - 5);
+                ctx.moveTo(cx, cy + 5);
+                ctx.lineTo(cx, cy + 20);
+                ctx.stroke();
+                
+                // Altitude ladder on right
+                const altLadderX = w - 40 + offsetX;
+                ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(altLadderX, 20);
+                ctx.lineTo(altLadderX, h - 20);
+                ctx.stroke();
+                
+                // Speed ladder on left
+                const spdLadderX = 40 + offsetX;
+                ctx.beginPath();
+                ctx.moveTo(spdLadderX, 20);
+                ctx.lineTo(spdLadderX, h - 20);
+                ctx.stroke();
+            }
+            
+            updateUI() {
+                // Update telemetry displays
+                document.getElementById('altitude').textContent = this.drone.z.toFixed(1);
+                document.getElementById('speed').textContent = Math.sqrt(this.drone.vx ** 2 + this.drone.vy ** 2).toFixed(1);
+                document.getElementById('distance').textContent = Math.sqrt(this.drone.x ** 2 + this.drone.y ** 2).toFixed(1);
+                document.getElementById('battery').textContent = Math.floor(this.drone.battery);
+                
+                document.getElementById('roll').textContent = this.drone.roll.toFixed(0);
+                document.getElementById('pitch').textContent = this.drone.pitch.toFixed(0);
+                
+                const yawDeg = (this.drone.yaw * 180 / Math.PI) % 360;
+                document.getElementById('yaw').textContent = yawDeg.toFixed(0);
+                
+                const headings = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+                const headingIndex = Math.round(((yawDeg + 360) % 360) / 45) % 8;
+                document.getElementById('heading').textContent = headings[headingIndex];
+                
+                // OSD
+                document.getElementById('osdAlt').textContent = this.drone.z.toFixed(1) + 'm';
+                document.getElementById('osdSpd').textContent = Math.sqrt(this.drone.vx ** 2 + this.drone.vy ** 2).toFixed(1) + 'm/s';
+                
+                const batEl = document.getElementById('osdBat');
+                batEl.textContent = Math.floor(this.drone.battery) + '%';
+                batEl.className = 'osd-value' + (this.drone.battery < 20 ? ' critical' : this.drone.battery < 40 ? ' warning' : '');
+                
+                // GPS
+                document.getElementById('lat').textContent = (12.97 + this.drone.x / 111000).toFixed(5);
+                document.getElementById('lon').textContent = (77.59 + this.drone.y / 111000).toFixed(5);
+                
+                // Attitude indicator
+                const horizon = document.getElementById('horizon');
+                horizon.style.transform = `rotate(${this.drone.roll}deg) translateY(${this.drone.pitch * 2}px)`;
+            }
+            
+            log(message, level = 'info') {
+                const console = document.getElementById('logConsole');
+                const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.innerHTML = `
+                    <span class="log-time">${time}</span>
+                    <span class="log-level ${level}">[${level.toUpperCase()}]</span>
+                    <span class="log-message">${message}</span>
+                `;
+                console.appendChild(entry);
+                console.scrollTop = console.scrollHeight;
+            }
+            
+            loop() {
+                this.processKeyboard();
+                this.updatePhysics();
+                this.updateUI();
+                this.render();
+                
+                // Update 3D view if active
+                if (this.camera.view === '3d' && this.renderer3D) {
+                    this.update3D();
+                }
+                
+                requestAnimationFrame(() => this.loop());
+            }
+        }
+        
+        // Initialize
+        const sim = new GroundStation();
+    </script>
+</body>
+</html>
