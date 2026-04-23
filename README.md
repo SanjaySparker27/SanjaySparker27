@@ -24,8 +24,8 @@
 │   🏭 Factory-Embedded Data Collection    🤖 Humanoid Manipulation          │
 │      30K+ Hours Captured                    3M+ Trajectories               │
 │                                                                             │
-│   🎯 10-15mm Pose Accuracy               🧠 Mally AI Framework             │
-│      SAM 3D + Depth Pro                     Agentic Robot Control          │
+│   🎯 10-15mm Pose Accuracy               🧠 Agentic AI                     │
+│      SAM 3D + Depth Pro                     LLM + Vision-Language           │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -60,16 +60,23 @@
 <tr>
 <td width="50%">
 
-### 🧠 
+### 🧠 Agentic AI
+- **LLM Planning** — Natural language to robot actions
+- **Vision-Language** — CLIP-based grounding
+- **Task Decomposition** — Complex to primitive actions
+- **Closed-Loop** — Real-time feedback & replanning
 
 </td>
 <td width="50%">
 
-### 🚁 UAV Systems
+### 🚁 UAV Systems & Autonomy
 - **100+ Autonomous Flights** — Multirotor, VTOL, UGV, USV
-- **GNC Architecture** — EKF3, VINS, RTK positioning
-- **PX4/ArduPilot** — Custom firmware & modules
-- **Mission Success** — >95% with FMEA validation
+- **VIO & SLAM** — Monocular/stereo VIO, keyframe SLAM, map correction
+- **360° Navigation** — Insta360 X4 cubemap, 6-camera virtual rig
+- **Trajectory Planning** — A*/RRT*, risk fields, MPC tracking
+- **3D Reconstruction** — Sparse SLAM → dense voxel/point-cloud
+- **Precision Strike** — PN/TPN guidance, visual target lock
+- **PX4/ArduPilot** — Custom firmware, offboard modules, RTK
 
 </td>
 </tr>
@@ -138,7 +145,7 @@
 <tr>
 <td width="50%">
 
-#### 🔧 [RATO Controller](https://sparker2707.github.io/sanjay-sparker-portfolio/#actuators)
+#### 🔧 [RATO Controller](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#actuators)
 ```
 Precision FOC Motor Controller
 ├── 3000W Continuous / 5kW Peak
@@ -148,7 +155,7 @@ Precision FOC Motor Controller
 └── ROS2 & CAN interface
 ```
 
-#### 🤖 [Mally AI](https://sparker2707.github.io/sanjay-sparker-portfolio/#mally)
+#### 🤖 [Agentic AI](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#agentic-ai)
 ```
 Agentic Robot Control Framework
 ├── LLM Task Planning
@@ -160,22 +167,40 @@ Agentic Robot Control Framework
 </td>
 <td width="50%">
 
-#### 🚁 [Tactical Loitering Munition](https://sparker2707.github.io/sanjay-sparker-portfolio/#uav)
+#### 🚁 [Tactical Loitering Munition](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#uav)
 ```
 Radar-Guided Interception
-├── Proportional Navigation
+├── Proportional Navigation (TPN v3)
 ├── Tube-Launch Dynamics
 ├── Point-Cloud Targeting
 └── Custom PX4 Module
 ```
 
-#### 🎯 [Fiber-Tethered Drone](https://sparker2707.github.io/sanjay-sparker-portfolio/#uav)
+#### 🎯 [Fiber-Tethered Drone](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#uav)
 ```
 GPS-Denied Navigation
 ├── VINS + EKF3 Fusion
 ├── CNN Depth Estimation
 ├── SLAM Localization
 └── 15km Fiber Optic Link
+```
+
+#### 🛰️ [EGO-Level Navigation](https://github.com/SanjaySparker27/ego-level-navigation)
+```
+Monocular + 360° Visual Autonomy
+├── Cubemap 6-camera virtual rig
+├── VIO + keyframe SLAM + map correction
+├── Depth→voxel occupancy + A* planner
+└── PX4/ArduPilot adapters
+```
+
+#### 💥 [Visual Missile Strike](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/#strike)
+```
+Autonomous UAV Interceptor
+├── TPN v3 + YOLOv11 target lock
+├── Keyframe SLAM + 3D reconstruction
+├── HUNT_CLIMB + DIVE guidance
+└── 0.71m precision record
 ```
 
 </td>
@@ -219,7 +244,7 @@ GPS-Denied Navigation
 
 <div align="center">
 
-[![Portfolio](https://img.shields.io/badge/🌐_View_My_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sparker2707.github.io/sanjay-sparker-portfolio/)
+[![Portfolio](https://img.shields.io/badge/🌐_View_My_Portfolio-FF6B35?style=for-the-badge&logoColor=white)](https://sanjaysparker27.github.io/sanjay-sparker-portfolio/)
 [![LinkedIn](https://img.shields.io/badge/🔗_Connect_on_LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/sanjay-sparker-5679b51b3/)
 [![Email](https://img.shields.io/badge/📧_Send_Email-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:sanjaysparker27@gmail.com)
 [![Phone](https://img.shields.io/badge/📱_Call_Me-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](tel:+919003811042)
